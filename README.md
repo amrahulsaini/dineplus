@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍽️ DinePlus - Restaurant Management System
 
-## Getting Started
+A comprehensive restaurant management platform similar to Petpooja, built with Next.js, TypeScript, and TailwindCSS. Features complete POS functionality, menu management, order tracking, inventory control, and analytics - all running in the browser with local storage.
+
+## ✨ Features
+
+### 🔐 Authentication System
+- **Admin Account**: Full access to restaurant management
+  - Email: `admin@dineplus.com`
+  - Password: `admin123`
+- **Customer Account**: Browse menu and place orders
+  - Email: `user@example.com`
+  - Password: `user123`
+
+### 👨‍💼 Admin Features
+
+#### 📊 Dashboard
+- Real-time statistics (Total Orders, Today's Revenue, Pending Orders)
+- Recent orders overview
+- Quick action shortcuts
+- Order status tracking
+
+#### 🍽️ Menu Management
+- Add, edit, and delete menu items
+- Category-based organization
+- Manage item availability in real-time
+- Veg/Non-veg classification
+- Price management
+- Preparation time tracking
+- Tags for popular/special items
+
+#### 📋 Order Management
+- View all orders with filtering by status
+- Real-time order status updates
+- Order details with customer information
+- Payment method tracking
+- Order type management (Dine-in, Takeaway, Delivery)
+
+#### 📁 Categories Management
+- Create and organize menu categories
+- Set display order
+- Activate/deactivate categories
+
+#### 🪑 Table Management
+- Visual table layout
+- Table status (Available, Occupied, Reserved)
+- Capacity management
+
+#### 📦 Inventory Management
+- Track ingredient stock levels
+- Low stock alerts
+- Restock management
+
+#### 📈 Reports & Analytics
+- Revenue tracking (Today, Week, Month, All-time)
+- Top-selling items analysis
+- Payment method distribution
+- Order type breakdown
+
+#### ⚙️ Settings
+- Restaurant information management
+- Operating hours configuration
+- Tax rate settings
+- Data management tools
+
+### 👥 Customer Features
+
+#### 🛒 Menu Browsing
+- Category-wise menu filtering
+- Visual menu cards
+- Veg/Non-veg indicators
+- Popular item badges
+
+#### 🛍️ Shopping Cart
+- Add items to cart
+- Adjust quantities
+- Real-time total calculation
+
+#### 💳 Checkout System
+- Order type selection
+- Payment method options
+- Delivery address
+- Tax calculation
+
+### 🍪 Cookie Consent & Storage
+- GDPR-compliant cookie consent banner
+- 30-day data persistence
+- Local storage for all data
+- No server-side storage
+
+## 🚀 Getting Started
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎯 Demo Credentials
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Admin Access
+```
+Email: admin@dineplus.com
+Password: admin123
+```
 
-## Learn More
+### Customer Access
+```
+Email: user@example.com
+Password: user123
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 💾 Data Storage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All data is stored locally in your browser using LocalStorage and Cookies (30 days). No backend required!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Technology Stack
 
-## Deploy on Vercel
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Storage**: Browser LocalStorage & Cookies
+- **State Management**: React Context API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Features Included
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+✅ Complete restaurant POS system  
+✅ Real-time order management  
+✅ Inventory tracking with low stock alerts  
+✅ Comprehensive analytics and reports  
+✅ Table management system  
+✅ Category-based menu organization  
+✅ Shopping cart with checkout  
+✅ Multiple order types (Dine-in, Takeaway, Delivery)  
+✅ Multiple payment methods  
+✅ Cookie consent (GDPR compliant)  
+✅ 30-day data persistence  
+✅ Fully responsive design  
+✅ No backend required  
+
+---
+
+Built with ❤️ using Next.js, TypeScript, and TailwindCSS
+
