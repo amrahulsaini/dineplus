@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-cream-50: #faf8f5;
+  --color-cream-100: #f5f0ea;
+  --color-cream-200: #ebe3d7;
+  --color-cream-300: #e0d5c4;
+  --color-cream-400: #d6c7b1;
+  --color-cream-500: #ccb99e;
+  --color-cream-600: #b8a48a;
+  --color-cream-700: #9a8970;
+  --color-dark-bg: #1a1a1a;
+  --color-dark-surface: #242424;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -8,13 +21,16 @@
   --secondary: 210 40% 96%;
   --border: 214 32% 91%;
   --radius: 1rem;
-  --orange-50: #fff7ed;
-  --orange-100: #ffedd5;
-  --orange-500: #f97316;
-  --orange-600: #ea580c;
-  --orange-700: #c2410c;
-  --red-600: #dc2626;
-  --red-700: #b91c1c;
+  --dark-bg: #1a1a1a;
+  --dark-surface: #242424;
+  --cream-50: #faf8f5;
+  --cream-100: #f5f0ea;
+  --cream-200: #ebe3d7;
+  --cream-300: #e0d5c4;
+  --cream-400: #d6c7b1;
+  --cream-500: #ccb99e;
+  --cream-600: #b8a48a;
+  --cream-700: #9a8970;
 }
 
 @theme inline {
@@ -26,8 +42,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a1a1a;
+    --foreground: #f5f0ea;
   }
 }
 
@@ -76,27 +92,31 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #242424;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  background: linear-gradient(180deg, #ccb99e 0%, #b8a48a 100%);
   border-radius: 10px;
-  border: 2px solid #f1f5f9;
+  border: 2px solid #242424;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
+  background: linear-gradient(180deg, #e0d5c4 0%, #ccb99e 100%);
 }
 
 /* Gradient Backgrounds */
 .gradient-primary {
-  background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #d6c7b1 0%, #b8a48a 100%);
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+  background: linear-gradient(135deg, #e0d5c4 0%, #ccb99e 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
 }
 
 .gradient-success {
@@ -118,7 +138,7 @@ button, a, input, select, textarea {
 }
 
 .card-shadow-hover:hover {
-  box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.25), 0 12px 24px -8px rgba(220, 38, 38, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(204, 185, 158, 0.3), 0 12px 24px -8px rgba(214, 199, 177, 0.2);
   transform: translateY(-4px) scale(1.01);
 }
 
@@ -213,15 +233,15 @@ button, a, input, select, textarea {
 
 /* Button Effects */
 .btn-primary {
-  @apply bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 active:scale-95;
+  @apply bg-gradient-to-r from-cream-500 to-cream-600 hover:from-cream-400 hover:to-cream-500 text-dark-bg font-bold py-3.5 px-6 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95;
 }
 
 .btn-secondary {
-  @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5;
+  @apply bg-dark-surface hover:bg-opacity-80 text-cream-100 font-semibold py-3 px-6 rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 border border-cream-600;
 }
 
 .btn-outline {
-  @apply border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold py-3 px-6 rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5;
+  @apply border-2 border-cream-500 text-cream-600 hover:bg-cream-50 font-semibold py-3 px-6 rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5;
 }
 
 /* Card Effects */
@@ -239,7 +259,7 @@ button, a, input, select, textarea {
 
 /* Input & Form Styles */
 .input-primary {
-  @apply w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all duration-300;
+  @apply w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-cream-200 focus:border-cream-500 outline-none transition-all duration-300;
 }
 
 .input-error {
