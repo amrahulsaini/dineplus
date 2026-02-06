@@ -31,7 +31,7 @@ export default function CookieConsent() {
         <div className="flex-1">
           <h3 className="font-semibold text-lg mb-1">🍪 Cookie Notice</h3>
           <p className="text-sm text-gray-300">
-            We use cookies and local storage to enhance your experience on DinePlus. 
+            We use cookies and local storage to enhance your experience on Loopwar. 
             Your data will be stored locally for 30 days to provide seamless ordering and restaurant management. 
             By clicking "Accept", you consent to our use of cookies.
           </p>

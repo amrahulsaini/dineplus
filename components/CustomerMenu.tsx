@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { MenuItem, Category, CartItem, Order, OrderType, PaymentMethod } from '@/types';
 import { storage, STORAGE_KEYS } from '@/lib/localStorage';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   ShoppingCart, 
@@ -97,10 +98,10 @@ export default function CustomerMenu() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-bold text-orange-600 flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <UtensilsCrossed className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg p-2">
+                <Image src="/favicon.svg" alt="Loopwar" width={24} height={24} />
               </div>
-              <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">DinePlus</span>
+              <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Loopwar</span>
             </h1>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600 hidden sm:block font-medium">

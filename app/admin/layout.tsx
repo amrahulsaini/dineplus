@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -46,10 +47,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                <UtensilsCrossed className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm p-2">
+                <Image src="/favicon.svg" alt="Loopwar" width={24} height={24} />
               </div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">DinePlus Admin</h1>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Loopwar Admin</h1>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-white/90 font-medium">

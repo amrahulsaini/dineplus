@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { UtensilsCrossed, Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, LogIn } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -16,9 +17,14 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    if (login(email, password)) {
-      // Redirect based on role will be handled by the main page
-      router.push('/');
+    const user = login(email, password);
+    if (user) {
+      // Redirect based on role
+      if (user.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/menu');
+      }
     } else {
       setError('Invalid email or password');
     }
@@ -28,10 +34,10 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 p-4 animate-fadeIn">
       <div className="glass backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-white/40 animate-scaleIn">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl mb-4 shadow-2xl transform hover:scale-110 transition-all duration-300 hover:rotate-6">
-            <UtensilsCrossed className="w-10 h-10 text-white" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl mb-4 shadow-2xl transform hover:scale-110 transition-all duration-300 hover:rotate-6 p-4">
+            <Image src="/favicon.svg" alt="Loopwar" width={48} height={48} />
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2 tracking-tight">DinePlus</h1>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2 tracking-tight">Loopwar</h1>
           <p className="text-gray-600 font-medium">Restaurant Management System</p>
         </div>
 
@@ -93,7 +99,7 @@ export default function LoginPage() {
             Demo Credentials:
           </p>
           <div className="text-xs text-orange-800 space-y-2 font-medium">
-            <p className="bg-white/60 px-3 py-2 rounded-xl"><strong>Admin:</strong> admin@dineplus.com / admin123</p>
+            <p className="bg-white/60 px-3 py-2 rounded-xl"><strong>Admin:</strong> admin@loopwar.com / admin123</p>
             <p className="bg-white/60 px-3 py-2 rounded-xl"><strong>User:</strong> user@example.com / user123</p>
           </div>
         </div>

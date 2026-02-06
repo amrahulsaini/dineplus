@@ -19,7 +19,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "DinePlus - Restaurant Management System",
+  title: "Loopwar - Restaurant Management System",
   description: "Complete restaurant management platform with POS, menu, orders, and analytics",
 };
 

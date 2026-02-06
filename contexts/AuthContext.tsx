@@ -6,7 +6,7 @@ import { storage, STORAGE_KEYS } from '@/lib/localStorage';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => User | null;
   logout: () => void;
   isAdmin: boolean;
 }
@@ -16,12 +16,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Demo users
 const demoUsers: { email: string; password: string; user: User }[] = [
   {
-    email: 'admin@dineplus.com',
+    email: 'admin@loopwar.com',
     password: 'admin123',
     user: {
       id: 'user-001',
       name: 'Admin User',
-      email: 'admin@dineplus.com',
+      email: 'admin@loopwar.com',
       phone: '+91 98765 43210',
       role: 'admin',
       createdAt: new Date().toISOString(),
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (email: string, password: string): boolean => {
+  const login = (email: string, password: string): User | null => {
     const matchedUser = demoUsers.find(
       (u) => u.email === email && u.password === password
     );
@@ -60,9 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (matchedUser) {
       setUser(matchedUser.user);
       storage.set(STORAGE_KEYS.USER, matchedUser.user);
-      return true;
+      return matchedUser.user;
     }
-    return false;
+    return null;
   };
 
   const logout = () => {

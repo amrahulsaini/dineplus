@@ -3,10 +3,10 @@ import { MenuItem, Category, Order, Restaurant, Table, Inventory } from '@/types
 // Demo restaurant data
 export const demoRestaurant: Restaurant = {
   id: 'rest-001',
-  name: 'DinePlus Restaurant',
+  name: 'Loopwar Restaurant',
   address: '123 Food Street, Gourmet City, 400001',
   phone: '+91 98765 43210',
-  email: 'contact@dineplus.co.in',
+  email: 'contact@loopwar.com',
   openingTime: '09:00',
   closingTime: '23:00',
   isOpen: true,
