@@ -72,34 +72,40 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <FeatureCard
-            icon={<Store className="w-8 h-8" />}
-            title="Multi-Restaurant Support"
-            description="Host multiple restaurants on one platform. Each restaurant gets its own POS, menu, and settings."
-          />
-          <FeatureCard
             icon={<ShoppingBag className="w-8 h-8" />}
-            title="Order Management"
-            description="Take orders, manage tables, track order status in real-time with an intuitive POS interface."
+            title="Smart Menu Management"
+            description="Create and organize your menu with categories, variations, and pricing options"
+            color="indigo"
           />
           <FeatureCard
             icon={<Users className="w-8 h-8" />}
-            title="Menu Management"
-            description="Create categories, add items with variations and addons. Customize pricing for each restaurant."
+            title="Table Management"
+            description="Manage dining areas, table assignments, and seating capacity with QR codes"
+            color="purple"
           />
           <FeatureCard
             icon={<BarChart3 className="w-8 h-8" />}
-            title="Analytics & Reports"
-            description="Detailed insights into sales, popular items, revenue trends, and business performance."
+            title="Real-time Analytics"
+            description="Track sales, inventory, and performance with comprehensive dashboards"
+            color="indigo"
           />
           <FeatureCard
             icon={<Settings className="w-8 h-8" />}
-            title="Table Management"
-            description="Organize tables, generate QR codes for contactless ordering, manage seating arrangements."
+            title="Inventory Tracking"
+            description="Monitor stock levels, get low-stock alerts, and manage suppliers"
+            color="purple"
           />
           <FeatureCard
             icon={<Zap className="w-8 h-8" />}
-            title="Inventory Tracking"
-            description="Monitor stock levels, set low-stock alerts, track ingredient usage across all menu items."
+            title="Fast & Reliable"
+            description="Lightning-fast order processing with offline support and cloud sync"
+            color="indigo"
+          />
+          <FeatureCard
+            icon={<Shield className="w-8 h-8" />}
+            title="Secure & Private"
+            description="Enterprise-grade security with encrypted data and regular backups"
+            color="purple"
           />
           <FeatureCard
             icon={<Shield className="w-8 h-8" />}
