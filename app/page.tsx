@@ -29,15 +29,20 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center animate-fadeIn">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl mb-6 shadow-2xl">
-            <Image src="/favicon.svg" alt="Loopwar" width={48} height={48} />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full font-semibold mb-8">
+            <Sparkles className="w-5 h-5" />
+            <span>Complete Restaurant Management Platform</span>
           </div>
-          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent tracking-tight">
-            Complete Restaurant Management
+          <h1 className="text-6xl font-black text-gray-900 mb-6 leading-tight">
+            Transform Your Restaurant
+            <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              With Modern POS
+            </span>
           </h1>
-          <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 mb-10 leading-relaxed">
+            Streamline operations, boost sales, and delight customers with our comprehensive restaurant management system.
             Loopwar is your all-in-one platform for managing restaurants efficiently. From orders to inventory, 
             analytics to menu management - everything you need in one place.
           </p>
