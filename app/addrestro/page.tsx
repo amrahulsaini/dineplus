@@ -205,11 +205,9 @@ export default function AddRestaurantPage() {
               <p className="text-sm text-gray-600 mt-3">
                 These credentials will be used to login to your restaurant's POS system
               </p>
-            </div>aceholder="Full restaurant address"
-              />
             </div>
 
-            {/* Settings */}
+            {/* Settings */
             <div className="grid md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">

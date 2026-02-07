@@ -117,17 +117,6 @@ export default function LoginPage() {
   );
 }
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 via-orange-50 to-red-50 p-4 animate-fadeIn">
-      <div className="bg-white/95 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-orange-200 animate-scaleIn">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl mb-4 shadow-2xl transform hover:scale-110 transition-all duration-300 hover:rotate-6 p-4">
-            <Image src="/favicon.svg" alt="Loopwar" width={48} height={48} />
-          </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-2 tracking-tight">Loopwar</h1>
-          <p className="text-gray-600 font-medium">Restaurant Management System</p>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
