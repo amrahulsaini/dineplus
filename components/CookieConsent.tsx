@@ -1,25 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { cookies } from '@/lib/localStorage';
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    const consent = cookies.getCookieConsent();
+    const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
       setShowBanner(true);
     }
   }, []);
 
   const handleAccept = () => {
-    cookies.setCookieConsent(true);
+    localStorage.setItem('cookieConsent', 'true');
     setShowBanner(false);
   };
 
   const handleDecline = () => {
-    cookies.setCookieConsent(false);
+    localStorage.setItem('cookieConsent', 'false');
     setShowBanner(false);
   };
 
