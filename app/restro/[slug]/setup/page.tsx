@@ -23,16 +23,19 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
   });
 
   useEffect(() => {
-    // Load restaurant from localStorage
-    const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-    const found = restaurants.find((r: Restaurant) => r.slug === params.slug);
+    // Load restaurant from currentRestaurant in localStorage (set during login)
+    const currentRestaurant = localStorage.getItem('currentRestaurant');
     
-    if (!found) {
-      router.push('/addrestro');
-      return;
+    if (currentRestaurant) {
+      const restaurantData = JSON.parse(currentRestaurant);
+      if (restaurantData.slug === params.slug) {
+        setRestaurant(restaurantData);
+        return;
+      }
     }
     
-    setRestaurant(found);
+    // If not in currentRestaurant, redirect to login
+    router.push('/login');
   }, [params.slug, router]);
 
   if (!restaurant) {
