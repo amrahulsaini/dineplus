@@ -74,7 +74,7 @@ export default function AddRestaurantPage() {
       
       setSuccess(true);
       setTimeout(() => {
-        window.location.href = `/restro/${createdRestaurant.slug}/setup`;
+        window.location.href = `https://pos.loopwar.dev/pos/${createdRestaurant.slug}/setup`;
       }, 2000);
     } catch (error) {
       console.error('Error:', error);

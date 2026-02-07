@@ -34,8 +34,8 @@ export default function LoginPage() {
 
       const restaurant = await response.json();
       
-      // Redirect to restaurant dashboard
-      router.push(`/restro/${restaurant.slug}/setup`);
+      // Redirect to POS website dashboard
+      window.location.href = `https://pos.loopwar.dev/pos/${restaurant.slug}/setup`;
     } catch (err) {
       setError('Login failed. Please try again.');
       setLoading(false);
