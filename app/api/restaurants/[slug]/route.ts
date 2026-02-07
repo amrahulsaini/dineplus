@@ -3,12 +3,13 @@ import pool from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params;
     const query = 'SELECT id, name, slug, email, phone, address, username, currency, tax_rate, timezone, is_active, created_at FROM restaurants WHERE slug = ? AND is_active = true';
     
-    const [rows]: any = await pool.query(query, [params.slug]);
+    const [rows]: any = await pool.query(query, [slug]);
     
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Restaurant not found' }, { status: 404 });
