@@ -1,17 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { initializeDemoData } from '@/lib/demoData';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield, Store, Plus } from 'lucide-react';
 
 export default function Home() {
   useEffect(() => {
-    // Initialize demo data on first load
-    initializeDemoData();
-    
-    // Redirect pos subdomain to admin login
+    // Redirect pos subdomain to POS login
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
       if (hostname === 'pos.loopwar.dev') {
@@ -32,10 +28,18 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <Link
-                href="/login"
-                className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                href="/addrestro"
+                className="px-6 py-2.5 bg-white border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
               >
-                Get Started
+                <Plus className="w-5 h-5" />
+                Add Restaurant
+              </Link>
+              <Link
+                href="/login"
+                className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
+              >
+                <Store className="w-5 h-5" />
+                POS Login
               </Link>
             </div>
           </div>
@@ -75,20 +79,25 @@ export default function Home() {
       {/* Features Grid */}
       <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 text-gray-900">Everything You Need</h2>
-          <p className="text-xl text-gray-600">Powerful features to run your restaurant smoothly</p>
+          <h2 className="text-4xl font-bold mb-4 text-gray-900">Complete Restaurant Solution</h2>
+          <p className="text-xl text-gray-600">Everything you need to run your restaurant efficiently</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <FeatureCard
+            icon={<Store className="w-8 h-8" />}
+            title="Multi-Restaurant Support"
+            description="Host multiple restaurants on one platform. Each restaurant gets its own POS, menu, and settings."
+          />
+          <FeatureCard
             icon={<ShoppingBag className="w-8 h-8" />}
             title="Order Management"
-            description="Track and manage orders in real-time. Handle dine-in, takeaway, and delivery orders efficiently."
+            description="Take orders, manage tables, track order status in real-time with an intuitive POS interface."
           />
           <FeatureCard
             icon={<Users className="w-8 h-8" />}
-            title="Customer Portal"
-            description="Beautiful customer interface for browsing menu, placing orders, and tracking deliveries."
+            title="Menu Management"
+            description="Create categories, add items with variations and addons. Customize pricing for each restaurant."
           />
           <FeatureCard
             icon={<BarChart3 className="w-8 h-8" />}
@@ -97,11 +106,19 @@ export default function Home() {
           />
           <FeatureCard
             icon={<Settings className="w-8 h-8" />}
-            title="Menu Management"
-            description="Easy-to-use interface to add, edit, and organize your menu items and categories."
+            title="Table Management"
+            description="Organize tables, generate QR codes for contactless ordering, manage seating arrangements."
           />
           <FeatureCard
             icon={<Zap className="w-8 h-8" />}
+            title="Inventory Tracking"
+            description="Monitor stock levels, set low-stock alerts, track ingredient usage across all menu items."
+          />
+          <FeatureCard
+            icon={<Shield className="w-8 h-8" />}
+            title="Secure & Reliable"
+            description="Each restaurant has unique credentials. Your data is secure with enterprise-grade security."
+          />
             title="Inventory Control"
             description="Keep track of stock levels, get low stock alerts, and manage ingredients efficiently."
           />
