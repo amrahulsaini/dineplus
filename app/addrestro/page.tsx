@@ -166,7 +166,9 @@ export default function AddRestaurantPage() {
                 onChange={(e) => setFormData({...formData, address: e.target.value})}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all"
                 rows={3}
-                pl
+                placeholder="Full restaurant address"
+              />
+            </div>
 
             {/* Login Credentials */}
             <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6">
