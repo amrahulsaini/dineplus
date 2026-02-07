@@ -119,14 +119,6 @@ export default function Home() {
             title="Secure & Reliable"
             description="Each restaurant has unique credentials. Your data is secure with enterprise-grade security."
           />
-            title="Inventory Control"
-            description="Keep track of stock levels, get low stock alerts, and manage ingredients efficiently."
-          />
-          <FeatureCard
-            icon={<Shield className="w-8 h-8" />}
-            title="Secure & Fast"
-            description="Built with modern technology for speed and security. Your data is always protected."
-          />
         </div>
       </section>
 
