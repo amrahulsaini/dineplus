@@ -154,46 +154,55 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Image src="/favicon.svg" alt="Loopwar Logo" width={32} height={32} className="rounded-lg" />
-            <span className="text-xl font-bold">Loopwar</span>
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Store className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold">Loopwar</span>
+            </div>
+            <div className="text-gray-400">
+              © 2026 Loopwar. All rights reserved.
+            </div>
+            <div className="flex gap-6">
+              <a href="https://pos.loopwar.dev/pos/login" className="text-gray-400 hover:text-white transition-colors">
+                Login
+              </a>
+              <a href="https://pos.loopwar.dev/pos/register" className="text-gray-400 hover:text-white transition-colors">
+                Register
+              </a>
+            </div>
           </div>
-          <p className="text-gray-400">Complete Restaurant Management System</p>
-          <p className="text-gray-500 mt-4">© 2026 Loopwar. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+interface FeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  color: 'indigo' | 'purple';
+}
+
+function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
+  const bgColor = color === 'indigo' ? 'bg-indigo-100' : 'bg-purple-100';
+  const textColor = color === 'indigo' ? 'text-indigo-600' : 'text-purple-600';
+
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-orange-500 transform hover:-translate-y-2">
-      <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg">
+    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:border-indigo-200">
+      <div className={`${bgColor} ${textColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6`}>
         {icon}
       </div>
-      <h3 className="text-xl font-bold mb-3 text-gray-900">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+      <p className="text-gray-600 leading-relaxed">{description}</p>
     </div>
   );
 }
 
-function BenefitItem({ text }: { text: string }) {
-  return (
-    <li className="flex items-center gap-3">
-      <CheckCircle className="w-6 h-6 flex-shrink-0" />
-      <span className="text-lg">{text}</span>
-    </li>
-  );
-}
-
-function StatItem({ number, label }: { number: string; label: string }) {
-  return (
-    <div>
-      <div className="text-4xl font-bold text-orange-600 mb-1">{number}</div>
-      <div className="text-gray-700">{label}</div>
     </div>
   );
 }
