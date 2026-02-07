@@ -31,29 +31,29 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] via-[#242424] to-[#1a1a1a] p-4 animate-fadeIn">
-      <div className="bg-[#242424]/95 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-cream-700/30 animate-scaleIn">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 via-orange-50 to-red-50 p-4 animate-fadeIn">
+      <div className="bg-white/95 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-orange-200 animate-scaleIn">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cream-500 to-cream-600 rounded-3xl mb-4 shadow-2xl transform hover:scale-110 transition-all duration-300 hover:rotate-6 p-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl mb-4 shadow-2xl transform hover:scale-110 transition-all duration-300 hover:rotate-6 p-4">
             <Image src="/favicon.svg" alt="Loopwar" width={48} height={48} />
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-cream-300 to-cream-500 bg-clip-text text-transparent mb-2 tracking-tight">Loopwar</h1>
-          <p className="text-cream-400 font-medium">Restaurant Management System</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-2 tracking-tight">Loopwar</h1>
+          <p className="text-gray-600 font-medium">Restaurant Management System</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-cream-200 mb-2">
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address
             </label>
             <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-cream-500 group-focus-within:text-cream-400 transition-colors duration-300" />
+              <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500 group-focus-within:text-orange-600 transition-colors duration-300" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-[#1a1a1a] border-2 border-cream-700/30 text-cream-200 rounded-2xl focus:ring-4 focus:ring-cream-600/30 focus:border-cream-500 outline-none transition-all duration-300 hover:border-cream-600/50"
+                className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-300 text-gray-900 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all duration-300 hover:border-orange-400"
                 placeholder="Enter your email"
                 required
               />
@@ -61,17 +61,17 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-semibold text-cream-200 mb-2">
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
               Password
             </label>
             <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-cream-500 group-focus-within:text-cream-400 transition-colors duration-300" />
+              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500 group-focus-within:text-orange-600 transition-colors duration-300" />
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-[#1a1a1a] border-2 border-cream-700/30 text-cream-200 rounded-2xl focus:ring-4 focus:ring-cream-600/30 focus:border-cream-500 outline-none transition-all duration-300 hover:border-cream-600/50"
+                className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-300 text-gray-900 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all duration-300 hover:border-orange-400"
                 placeholder="Enter your password"
                 required
               />
@@ -86,21 +86,21 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-cream-500 to-cream-600 hover:from-cream-400 hover:to-cream-500 text-[#1a1a1a] font-bold py-3.5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold py-3.5 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
           >
             <LogIn className="w-5 h-5" />
             Sign In
           </button>
         </form>
 
-        <div className="mt-8 p-5 bg-cream-600/20 rounded-2xl border-2 border-cream-600/30 shadow-lg">
-          <p className="text-sm font-bold text-cream-200 mb-3 flex items-center gap-2">
-            <Lock className="w-4 h-4" />
+        <div className="mt-8 p-5 bg-orange-50 rounded-2xl border-2 border-orange-200 shadow-lg">
+          <p className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <Lock className="w-4 h-4 text-orange-500" />
             Demo Credentials:
           </p>
-          <div className="text-xs text-cream-300 space-y-2 font-medium">
-            <p className="bg-[#1a1a1a]/60 px-3 py-2 rounded-xl"><strong>Admin:</strong> admin@loopwar.com / admin123</p>
-            <p className="bg-[#1a1a1a]/60 px-3 py-2 rounded-xl"><strong>User:</strong> user@example.com / user123</p>
+          <div className="text-xs text-gray-700 space-y-2 font-medium">
+            <p className="bg-white px-3 py-2 rounded-xl border border-orange-200"><strong>Admin:</strong> admin@loopwar.com / admin123</p>
+            <p className="bg-white px-3 py-2 rounded-xl border border-orange-200"><strong>User:</strong> user@example.com / user123</p>
           </div>
         </div>
       </div>
