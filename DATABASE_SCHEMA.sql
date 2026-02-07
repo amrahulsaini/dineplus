@@ -10,6 +10,8 @@ CREATE TABLE restaurants (
     email VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
     address TEXT,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     logo VARCHAR(500),
     is_active BOOLEAN DEFAULT true,
     currency VARCHAR(10) DEFAULT 'USD',
@@ -18,6 +20,7 @@ CREATE TABLE restaurants (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_slug (slug),
+    INDEX idx_username (username),
     INDEX idx_active (is_active)
 );
 
@@ -184,8 +187,8 @@ CREATE INDEX idx_tables_restaurant_status ON restaurant_tables(restaurant_id, st
 -- =====================================================
 
 -- Insert first restaurant: MTS
-INSERT INTO restaurants (id, name, slug, email, phone, address, currency, tax_rate, timezone) VALUES
-('mts-001', 'MTS Restaurant', 'mts-123', 'contact@mts.com', '+1234567890', '123 Main Street, City', 'USD', 10.00, 'America/New_York');
+INSERT INTO restaurants (id, name, slug, email, phone, address, username, password, currency, tax_rate, timezone) VALUES
+('mts-001', 'MTS Restaurant', 'mts-123', 'contact@mts.com', '+1234567890', '123 Main Street, City', 'mts_admin', 'mts123', 'USD', 10.00, 'America/New_York');
 
 -- Sample category for MTS
 INSERT INTO menu_categories (id, restaurant_id, name, description, display_order) VALUES
