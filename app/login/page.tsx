@@ -34,9 +34,6 @@ export default function LoginPage() {
 
       const restaurant = await response.json();
       
-      // Store logged-in restaurant in localStorage for client-side use
-      localStorage.setItem('currentRestaurant', JSON.stringify(restaurant));
-      
       // Redirect to restaurant dashboard
       router.push(`/restro/${restaurant.slug}/setup`);
     } catch (err) {

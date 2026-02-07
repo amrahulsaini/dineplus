@@ -23,19 +23,25 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
   });
 
   useEffect(() => {
-    // Load restaurant from currentRestaurant in localStorage (set during login)
-    const currentRestaurant = localStorage.getItem('currentRestaurant');
-    
-    if (currentRestaurant) {
-      const restaurantData = JSON.parse(currentRestaurant);
-      if (restaurantData.slug === params.slug) {
+    // Fetch restaurant from database
+    const fetchRestaurant = async () => {
+      try {
+        const response = await fetch(`/api/restaurants/${params.slug}`);
+        
+        if (!response.ok) {
+          router.push('/login');
+          return;
+        }
+        
+        const restaurantData = await response.json();
         setRestaurant(restaurantData);
-        return;
+      } catch (error) {
+        console.error('Error fetching restaurant:', error);
+        router.push('/login');
       }
-    }
+    };
     
-    // If not in currentRestaurant, redirect to login
-    router.push('/login');
+    fetchRestaurant();
   }, [params.slug, router]);
 
   if (!restaurant) {
