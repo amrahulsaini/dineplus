@@ -7,14 +7,15 @@ import Link from 'next/link';
 import { CheckCircle, ArrowRight, UtensilsCrossed, Armchair, Package, BarChart3 } from 'lucide-react';
 
 interface SetupPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function RestaurantSetupPage({ params }: SetupPageProps) {
   const router = useRouter();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [slug, setSlug] = useState<string>('');
   const [setupSteps, setSetupSteps] = useState({
     categories: false,
     menu: false,
@@ -23,10 +24,13 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
   });
 
   useEffect(() => {
-    // Fetch restaurant from database
+    // Resolve params and fetch restaurant from database
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(`/api/restaurants/${params.slug}`);
+        const resolvedParams = await params;
+        setSlug(resolvedParams.slug);
+        
+        const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
         
         if (!response.ok) {
           router.push('/login');
@@ -42,7 +46,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
     };
     
     fetchRestaurant();
-  }, [params.slug, router]);
+  }, [params, router]);
 
   if (!restaurant) {
     return (
@@ -78,7 +82,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
             description="Create menu categories like Starters, Main Course, Beverages"
             icon={<UtensilsCrossed className="w-8 h-8" />}
             isComplete={setupSteps.categories}
-            href={`/restro/${restaurant.slug}/categories`}
+            href={`/restro/${slug}/categories`}
           />
 
           {/* Step 2: Menu Items */}
@@ -87,7 +91,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
             description="Add dishes with prices, variations, and addons"
             icon={<UtensilsCrossed className="w-8 h-8" />}
             isComplete={setupSteps.menu}
-            href={`/restro/${restaurant.slug}/menu`}
+            href={`/restro/${slug}/menu`}
           />
 
           {/* Step 3: Tables */}
@@ -96,7 +100,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
             description="Configure your restaurant tables and seating"
             icon={<Armchair className="w-8 h-8" />}
             isComplete={setupSteps.tables}
-            href={`/restro/${restaurant.slug}/tables`}
+            href={`/restro/${slug}/tables`}
           />
 
           {/* Step 4: Inventory */}
@@ -105,7 +109,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
             description="Track ingredients and stock levels (Optional)"
             icon={<Package className="w-8 h-8" />}
             isComplete={setupSteps.inventory}
-            href={`/restro/${restaurant.slug}/inventory`}
+            href={`/restro/${slug}/inventory`}
           />
         </div>
 
@@ -114,7 +118,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
           <h2 className="text-2xl font-bold mb-6 text-gray-900">Quick Actions</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Link
-              href={`/restro/${restaurant.slug}/dashboard`}
+              href={`/restro/${slug}/dashboard`}
               className="flex items-center gap-3 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-2xl hover:shadow-xl transition-all transform hover:scale-105"
             >
               <BarChart3 className="w-6 h-6" />
@@ -122,7 +126,7 @@ export default function RestaurantSetupPage({ params }: SetupPageProps) {
             </Link>
             
             <Link
-              href={`https://pos.loopwar.dev/${restaurant.slug}`}
+              href={`https://pos.loopwar.dev/${slug}`}
               target="_blank"
               className="flex items-center gap-3 p-4 bg-white border-2 border-orange-500 text-orange-600 rounded-2xl hover:bg-orange-50 transition-all"
             >
