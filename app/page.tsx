@@ -202,7 +202,3 @@ function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
     </div>
   );
 }
-
-    </div>
-  );
-}
