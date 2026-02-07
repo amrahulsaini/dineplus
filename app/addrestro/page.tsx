@@ -37,11 +37,10 @@ export default function AddRestaurantPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const restaurant: Restaurant = {
-      id: `rest-${Date.now()}`,
+    const restaurant = {
       name: formData.name,
       slug: formData.slug,
       email: formData.email,
@@ -49,8 +48,6 @@ export default function AddRestaurantPage() {
       address: formData.address,
       username: formData.username,
       password: formData.password,
-      isActive: true,
-      createdAt: new Date().toISOString(),
       settings: {
         currency: formData.currency,
         taxRate: parseFloat(formData.taxRate),
@@ -58,14 +55,31 @@ export default function AddRestaurantPage() {
       }
     };
 
-    const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-    restaurants.push(restaurant);
-    localStorage.setItem('restaurants', JSON.stringify(restaurants));
+    try {
+      const response = await fetch('/api/restaurants', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restaurant),
+      });
 
-    setSuccess(true);
-    setTimeout(() => {
-      window.location.href = `/restro/${restaurant.slug}/setup`;
-    }, 2000);
+      if (!response.ok) {
+        const error = await response.json();
+        alert(error.error || 'Failed to create restaurant');
+        return;
+      }
+
+      const createdRestaurant = await response.json();
+      
+      setSuccess(true);
+      setTimeout(() => {
+        window.location.href = `/restro/${createdRestaurant.slug}/setup`;
+      }, 2000);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to create restaurant. Please try again.');
+    }
   };
 
   return (

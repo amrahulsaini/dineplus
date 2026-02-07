@@ -18,25 +18,29 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Get all restaurants from localStorage
-      const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-      
-      // Find restaurant with matching credentials
-      const restaurant = restaurants.find((r: any) => 
-        r.username === username && r.password === password
-      );
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      if (restaurant) {
-        // Store logged-in restaurant
-        localStorage.setItem('currentRestaurant', JSON.stringify(restaurant));
-        // Redirect to restaurant dashboard
-        router.push(`/restro/${restaurant.slug}/setup`);
-      } else {
+      if (!response.ok) {
         setError('Invalid username or password');
+        setLoading(false);
+        return;
       }
+
+      const restaurant = await response.json();
+      
+      // Store logged-in restaurant in localStorage for client-side use
+      localStorage.setItem('currentRestaurant', JSON.stringify(restaurant));
+      
+      // Redirect to restaurant dashboard
+      router.push(`/restro/${restaurant.slug}/setup`);
     } catch (err) {
       setError('Login failed. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
