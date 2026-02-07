@@ -72,6 +72,9 @@ export default function AddRestaurantPage() {
 
       const createdRestaurant = await response.json();
       
+      // Store restaurant in localStorage for setup page
+      localStorage.setItem('currentRestaurant', JSON.stringify(createdRestaurant));
+      
       setSuccess(true);
       setTimeout(() => {
         window.location.href = `/restro/${createdRestaurant.slug}/setup`;
