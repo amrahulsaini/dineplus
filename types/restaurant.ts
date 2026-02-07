@@ -7,6 +7,8 @@ export interface Restaurant {
   email: string;
   phone: string;
   address: string;
+  username: string; // POS login username
+  password: string; // POS login password
   logo?: string;
   isActive: boolean;
   createdAt: string;

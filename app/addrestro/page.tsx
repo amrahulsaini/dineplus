@@ -12,6 +12,8 @@ export default function AddRestaurantPage() {
     email: '',
     phone: '',
     address: '',
+    username: '',
+    password: '',
     currency: 'USD',
     taxRate: '10',
     timezone: 'UTC'
@@ -45,6 +47,8 @@ export default function AddRestaurantPage() {
       email: formData.email,
       phone: formData.phone,
       address: formData.address,
+      username: formData.username,
+      password: formData.password,
       isActive: true,
       createdAt: new Date().toISOString(),
       settings: {
@@ -162,7 +166,44 @@ export default function AddRestaurantPage() {
                 onChange={(e) => setFormData({...formData, address: e.target.value})}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all"
                 rows={3}
-                placeholder="Full restaurant address"
+                pl
+
+            {/* Login Credentials */}
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6">
+              <h3 className="font-bold text-lg mb-4 text-gray-900">🔐 POS Login Credentials</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Username *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.username}
+                    onChange={(e) => setFormData({...formData, username: e.target.value})}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all"
+                    placeholder="admin"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={formData.password}
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:ring-4 focus:ring-orange-200 focus:border-orange-500 outline-none transition-all"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mt-3">
+                These credentials will be used to login to your restaurant's POS system
+              </p>
+            </div>aceholder="Full restaurant address"
               />
             </div>
 
