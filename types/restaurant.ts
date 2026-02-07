@@ -1,3 +1,5 @@
+import { MenuItem, Category, Order } from './index';
+
 export interface Restaurant {
   id: string;
   name: string;
