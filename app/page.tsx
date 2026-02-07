@@ -10,6 +10,14 @@ export default function Home() {
   useEffect(() => {
     // Initialize demo data on first load
     initializeDemoData();
+    
+    // Redirect pos subdomain to admin login
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname === 'pos.loopwar.dev') {
+        window.location.href = '/login';
+      }
+    }
   }, []);
 
   return (
