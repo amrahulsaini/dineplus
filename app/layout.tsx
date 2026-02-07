@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
 
 const inter = Inter({
@@ -33,10 +32,8 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${poppins.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-          <CookieConsent />
-        </AuthProvider>
+        {children}
+        <CookieConsent />
       </body>
     </html>
   );
