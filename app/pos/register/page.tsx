@@ -82,18 +82,19 @@ export default function POSRegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12">
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
+      <div className="max-w-4xl mx-auto px-4 relative">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-white mb-2">
             Register Your Restaurant
           </h1>
-          <p className="text-gray-600">Set up your restaurant POS system</p>
+          <p className="text-slate-400">Set up your restaurant POS system</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-orange-200">
+        <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-700">
           {success && (
-            <div className="mb-6 p-4 bg-green-50 border-2 border-green-500 rounded-2xl text-green-800 font-semibold">
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-2xl text-green-400 font-semibold">
               ✅ Restaurant created successfully! Redirecting to setup...
             </div>
           )}
@@ -102,7 +103,7 @@ export default function POSRegisterPage() {
             <div className="space-y-6">
               {/* Restaurant Details */}
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                   <Building2 className="w-6 h-6 text-orange-500" />
                   Restaurant Details
                 </h2>

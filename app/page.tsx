@@ -1,46 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield, Store, Plus } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield, Store, Sparkles } from 'lucide-react';
 
 export default function Home() {
-  useEffect(() => {
-    // Redirect pos subdomain to POS login
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      if (hostname === 'pos.loopwar.dev') {
-        window.location.href = '/login';
-      }
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-orange-200 sticky top-0 z-50 shadow-lg">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <Image src="/favicon.svg" alt="Loopwar Logo" width={40} height={40} className="rounded-xl" />
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">Loopwar</h1>
+              <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Store className="w-7 h-7 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Loopwar</h1>
             </div>
             <div className="flex items-center gap-4">
-              <Link
-                href="/addrestro"
-                className="px-6 py-2.5 bg-white border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
+              <a
+                href="https://pos.loopwar.dev/pos/login"
+                className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                <Plus className="w-5 h-5" />
-                Add Restaurant
-              </Link>
-              <Link
-                href="/login"
-                className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
-              >
-                <Store className="w-5 h-5" />
-                POS Login
-              </Link>
+                Access POS
+              </a>
             </div>
           </div>
         </div>
