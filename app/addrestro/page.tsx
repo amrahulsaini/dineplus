@@ -208,7 +208,8 @@ export default function AddRestaurantPage() {
             </div>
 
             {/* Settings */
-            <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <div className="grid md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   <DollarSign className="w-4 h-4 inline mr-2" />
@@ -257,6 +258,7 @@ export default function AddRestaurantPage() {
                   <option value="Asia/Kolkata">IST</option>
                 </select>
               </div>
+            </div>
             </div>
 
             {/* Submit */}
