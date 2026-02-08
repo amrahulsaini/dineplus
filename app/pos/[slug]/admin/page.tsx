@@ -49,7 +49,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
   useEffect(() => {
     const checkAuth = async () => {
       const resolvedParams = await params;
-      const storedAuth = sessionStorage.getItem(`admin_auth_${resolvedParams.slug}`);
+      const storedAuth = sessionStorage.getItem('admin_auth_' + resolvedParams.slug);
       
       if (storedAuth) {
         await loadRestaurantData(resolvedParams.slug);
@@ -77,7 +77,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
       if (response.ok) {
         const data = await response.json();
-        sessionStorage.setItem(`admin_auth_${resolvedParams.slug}`, 'true');
+        sessionStorage.setItem('admin_auth_' + resolvedParams.slug, 'true');
         setAuthenticated(true);
         await loadRestaurantData(resolvedParams.slug);
       } else {
@@ -90,7 +90,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
   const loadRestaurantData = async (slug: string) => {
     try {
-      const response = await fetch(`/api/restaurants/${slug}`);
+      const response = await fetch('/api/restaurants/' + slug);
       if (!response.ok) {
         router.push('/pos/login');
         return;
@@ -112,7 +112,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
   const loadOrders = async (restaurantId: string) => {
     try {
-      const response = await fetch(`/api/orders?restaurantId=${restaurantId}&limit=20`);
+      const response = await fetch('/api/orders?restaurantId=' + restaurantId + '&limit=20');
       if (response.ok) {
         const data = await response.json();
         setOrders(Array.isArray(data) ? data : []);
@@ -124,7 +124,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
   const loadStats = async (restaurantId: string) => {
     try {
-      const response = await fetch(`/api/orders/stats?restaurantId=${restaurantId}`);
+      const response = await fetch('/api/orders/stats?restaurantId=' + restaurantId);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -248,7 +248,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Link
-            href={`/pos/${restaurant.slug}/admin/tables`}
+            href={'/pos/' + restaurant.slug + '/admin/tables'}
             className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
           >
             <div className="flex items-center gap-4">
@@ -263,7 +263,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           </Link>
 
           <Link
-            href={`/pos/${restaurant.slug}/menu`}
+            href={'/pos/' + restaurant.slug + '/menu'}
             className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
           >
             <div className="flex items-center gap-4">
@@ -278,7 +278,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           </Link>
 
           <Link
-            href={`/pos/${restaurant.slug}/admin/reports`}
+            href={'/pos/' + restaurant.slug + '/admin/reports'}
             className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
           >
             <div className="flex items-center gap-4">
@@ -326,7 +326,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
                     </td>
                     <td className="py-4 px-4">
                       <Link
-                        href={`/pos/${restaurant.slug}/admin/orders/${order.id}`}
+                        href={'/pos/' + restaurant.slug + '/admin/orders/' + order.id}
                         className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200"
                       >
                         <Eye className="w-4 h-4" />
@@ -348,4 +348,6 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       </div>
     </div>
   );
-}
+};
+
+export default AdminDashboard;

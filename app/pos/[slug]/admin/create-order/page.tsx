@@ -63,7 +63,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch('/api/restaurants/' + resolvedParams.slug);
       
       if (!response.ok) {
         router.push('/pos/login');
@@ -87,7 +87,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const loadMenuItems = async (restaurantId: string) => {
     try {
-      const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
+      const response = await fetch('/api/menu?restaurantId=' + restaurantId);
       if (response.ok) {
         const data = await response.json();
         setMenuItems(Array.isArray(data) ? data.filter((item: MenuItem) => item.is_active) : []);
@@ -99,7 +99,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const loadCategories = async (restaurantId: string) => {
     try {
-      const response = await fetch(`/api/categories?restaurantId=${restaurantId}`);
+      const response = await fetch('/api/categories?restaurantId=' + restaurantId);
       if (response.ok) {
         const data = await response.json();
         setCategories(Array.isArray(data) ? data : []);
@@ -111,7 +111,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const loadTables = async (restaurantId: string) => {
     try {
-      const response = await fetch(`/api/tables?restaurantId=${restaurantId}`);
+      const response = await fetch('/api/tables?restaurantId=' + restaurantId);
       if (response.ok) {
         const data = await response.json();
         setTables(Array.isArray(data) ? data : []);
@@ -198,7 +198,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
       if (response.ok) {
         alert('Order created successfully!');
-        router.push(`/pos/${restaurant.slug}/admin`);
+        router.push('/pos/' + restaurant.slug + '/admin');
       } else {
         alert('Failed to create order');
       }
@@ -437,5 +437,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
       </div>
     </div>
   );
-}
+};
+
+export default CreateOrderPage;
 
