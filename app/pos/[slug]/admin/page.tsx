@@ -348,6 +348,4 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       </div>
     </div>
   );
-};
-
-export default AdminDashboard;
+}

@@ -437,7 +437,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
       </div>
     </div>
   );
-};
+}
 
-export default CreateOrderPage;
 
