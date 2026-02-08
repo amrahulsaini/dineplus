@@ -316,7 +316,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
                     <td className="py-4 px-4">{order.customer_name || 'Walk-in'}</td>
                     <td className="py-4 px-4 capitalize">{order.order_type}</td>
                     <td className="py-4 px-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                      <span className={"px-3 py-1 rounded-full text-xs font-semibold " + getStatusColor(order.status)}>
                         {order.status}
                       </span>
                     </td>
