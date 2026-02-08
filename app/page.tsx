@@ -11,15 +11,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
                 <Store className="w-7 h-7 text-white" />
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Loopwar</h1>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">Loopwar</h1>
             </div>
             <div className="flex items-center gap-4">
               <a
                 href="https://pos.loopwar.dev/pos/login"
-                className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Access POS
               </a>
@@ -31,13 +31,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full font-semibold mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-50 text-orange-700 rounded-full font-semibold mb-8">
             <Sparkles className="w-5 h-5" />
             <span>Complete Restaurant Management Platform</span>
           </div>
           <h1 className="text-6xl font-black text-gray-900 mb-6 leading-tight">
             Transform Your Restaurant
-            <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
               With Modern POS
             </span>
           </h1>
@@ -47,18 +47,18 @@ export default function Home() {
             analytics to menu management - everything you need in one place.
           </p>
           <div className="flex items-center justify-center gap-4">
-            <Link
-              href="/login"
+            <a
+              href="https://pos.loopwar.dev/pos/register"
               className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center gap-2"
             >
               Start Free Trial <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
+            </a>
+            <a
               href="#features"
               className="px-8 py-4 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-bold rounded-2xl transition-all duration-300"
             >
               Learn More
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -75,38 +75,39 @@ export default function Home() {
             icon={<ShoppingBag className="w-8 h-8" />}
             title="Smart Menu Management"
             description="Create and organize your menu with categories, variations, and pricing options"
-            color="indigo"
+            color="orange"
           />
           <FeatureCard
             icon={<Users className="w-8 h-8" />}
             title="Table Management"
             description="Manage dining areas, table assignments, and seating capacity with QR codes"
-            color="purple"
+            color="red"
           />
           <FeatureCard
             icon={<BarChart3 className="w-8 h-8" />}
             title="Real-time Analytics"
             description="Track sales, inventory, and performance with comprehensive dashboards"
-            color="indigo"
+            color="orange"
           />
           <FeatureCard
             icon={<Settings className="w-8 h-8" />}
             title="Inventory Tracking"
             description="Monitor stock levels, get low-stock alerts, and manage suppliers"
-            color="purple"
+            color="red"
           />
           <FeatureCard
             icon={<Zap className="w-8 h-8" />}
             title="Fast & Reliable"
             description="Lightning-fast order processing with offline support and cloud sync"
-            color="indigo"
+            color="orange"
           />
           <FeatureCard
             icon={<Shield className="w-8 h-8" />}
             title="Secure & Private"
             description="Enterprise-grade security with encrypted data and regular backups"
-            color="purple"
+            color="red"
           />
+        </div>
         </div>
       </section>
 
@@ -178,15 +179,15 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="bg-gradient-to-br from-cream-600/20 to-cream-700/20 rounded-3xl p-12 text-center border-2 border-cream-600/30">
-          <h2 className="text-4xl font-bold mb-4 text-cream-200">Ready to Transform Your Restaurant?</h2>
-          <p className="text-xl text-cream-400 mb-8">Start managing your restaurant the smart way with Loopwar</p>
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cream-500 to-cream-600 hover:from-cream-400 hover:to-cream-500 text-[#1a1a1a] font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+        <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl p-12 text-center border-2 border-orange-200">
+          <h2 className="text-4xl font-bold mb-4 text-gray-900">Ready to Transform Your Restaurant?</h2>
+          <p className="text-xl text-gray-600 mb-8">Start managing your restaurant the smart way with Loopwar</p>
+          <a
+            href="https://pos.loopwar.dev/pos/register"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-orange-600 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
           >
             Get Started Now <ArrowRight className="w-5 h-5" />
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -195,7 +196,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
                 <Store className="w-6 h-6 text-white" />
               </div>
               <span className="text-2xl font-bold">Loopwar</span>
@@ -222,15 +223,15 @@ interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  color: 'indigo' | 'purple';
+  color: 'orange' | 'red';
 }
 
 function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
-  const bgColor = color === 'indigo' ? 'bg-indigo-100' : 'bg-purple-100';
-  const textColor = color === 'indigo' ? 'text-indigo-600' : 'text-purple-600';
+  const bgColor = color === 'orange' ? 'bg-orange-100' : 'bg-red-100';
+  const textColor = color === 'orange' ? 'text-orange-600' : 'text-red-600';
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:border-indigo-200">
+    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:border-orange-200">
       <div className={`${bgColor} ${textColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6`}>
         {icon}
       </div>
