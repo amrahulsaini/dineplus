@@ -211,7 +211,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               <h4 className="font-bold text-gray-900">{item.name}</h4>
               {item.description && <p className="text-sm text-gray-600 mt-1">{item.description}</p>}
               <p className="text-lg font-bold text-orange-600 mt-2">
-                {restaurant.currency} {item.base_price}
+                {restaurant?.currency} {item.base_price}
               </p>
             </div>
             <button className="p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200">
@@ -233,7 +233,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
           <div className="flex justify-between items-start mb-2">
             <div className="flex-1">
               <h4 className="font-semibold text-sm">{item.name}</h4>
-              <p className="text-xs text-gray-600">{restaurant.currency} {item.unitPrice} each</p>
+              <p className="text-xs text-gray-600">{restaurant?.currency} {item.unitPrice} each</p>
             </div>
             <button onClick={() => removeFromCart(item.menuItemId)} className="text-red-500 hover:text-red-700">
               <Trash2 className="w-4 h-4" />
@@ -249,7 +249,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 <Plus className="w-4 h-4" />
               </button>
             </div>
-            <p className="font-bold">{restaurant.currency} {Number(item.total).toFixed(2)}</p>
+            <p className="font-bold">{restaurant?.currency} {Number(item.total).toFixed(2)}</p>
           </div>
         </div>
       );
@@ -311,7 +311,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     );
   }
 
-  let filteredItems = [];
+  let filteredItems: MenuItem[] = [];
   if (selectedCategory === 'all') {
     filteredItems = menuItems;
   } else {
@@ -394,80 +394,79 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 </div>
               )}
             </div>
-          </div>
+        </div>
 
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
-              <h3 className="font-bold text-lg mb-4">Order Summary</h3>
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+            <h3 className="font-bold text-lg mb-4">Order Summary</h3>
 
-              <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
-                {renderCartItems()}
+            <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
+              {renderCartItems()}
 
-                {cart.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <ShoppingCart className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                    <p>Cart is empty</p>
-                  </div>
-                )}
-              </div>
-
-              {orderType !== 'dine-in' && (
-                <div className="mb-4 space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Customer Name"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
-                  />
+              {cart.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <ShoppingCart className="w-12 h-12 mx-auto mb-2 opacity-30" />
+                  <p>Cart is empty</p>
                 </div>
               )}
-
-              <div className="border-t-2 border-gray-200 pt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold">{restaurant.currency} {Number(subtotal).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Tax ({restaurant.tax_rate || 0}%)</span>
-                  <span className="font-semibold">{restaurant.currency} {Number(tax).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold border-t-2 border-gray-200 pt-2">
-                  <span>Total</span>
-                  <span className="text-orange-600">{restaurant.currency} {Number(total).toFixed(2)}</span>
-                </div>
-              </div>
-
-              <textarea
-                placeholder="Special instructions..."
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full mt-4 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
-                rows={2}
-              />
-
-              <button
-                onClick={handleCreateOrder}
-                disabled={cart.length === 0 || saving}
-                className="w-full mt-4 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {saving ? (
-                  <>Processing...</>
-                ) : (
-                  <>
-                    <Check className="w-5 h-5" />
-                    Place Order
-                  </>
-                )}
-              </button>
             </div>
+
+            {orderType !== 'dine-in' && (
+              <div className="mb-4 space-y-3">
+                <input
+                  type="text"
+                  placeholder="Customer Name"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
+                />
+              </div>
+            )}
+
+            <div className="border-t-2 border-gray-200 pt-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Subtotal</span>
+                <span className="font-semibold">{restaurant?.currency} {Number(subtotal).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Tax ({restaurant?.tax_rate || 0}%)</span>
+                <span className="font-semibold">{restaurant?.currency} {Number(tax).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-lg font-bold border-t-2 border-gray-200 pt-2">
+                <span>Total</span>
+                <span className="text-orange-600">{restaurant?.currency} {Number(total).toFixed(2)}</span>
+              </div>
+            </div>
+
+            <textarea
+              placeholder="Special instructions..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="w-full mt-4 px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
+              rows={2}
+            />
+
+            <button
+              onClick={handleCreateOrder}
+              disabled={cart.length === 0 || saving}
+              className="w-full mt-4 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {saving ? (
+                <>Processing...</>
+              ) : (
+                <>
+                  <Check className="w-5 h-5" />
+                  Place Order
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>

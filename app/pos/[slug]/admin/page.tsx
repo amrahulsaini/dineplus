@@ -134,6 +134,20 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
     }
   };
 
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, username: e.target.value });
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, password: e.target.value });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
@@ -185,7 +199,35 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           </div>
         </div>
       </div>
-  )
+    );
+  }
+
+  function renderOrderRows() {
+    const rows = [];
+    for (let i = 0; i < orders.length; i++) {
+      const order = orders[i];
+      rows.push(
+        <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-50">
+          <td className="py-3 px-4 text-sm">#{order.id.slice(0, 8)}</td>
+          <td className="py-3 px-4 text-sm">{order.customer_name || 'Walk-in'}</td>
+          <td className="py-3 px-4 text-sm capitalize">{order.order_type}</td>
+          <td className="py-3 px-4">
+            <span className={'px-3 py-1 rounded-full text-xs font-semibold ' + getStatusColor(order.status)}>
+              {order.status}
+            </span>
+          </td>
+          <td className="py-3 px-4 text-sm font-semibold">{restaurant?.currency} {order.total}</td>
+          <td className="py-3 px-4 text-sm text-gray-600">{new Date(order.created_at).toLocaleTimeString()}</td>
+          <td className="py-3 px-4">
+            <Link href={'/pos/' + restaurant?.slug + '/admin/orders/' + order.id} className="text-orange-600 hover:text-orange-800">
+              <Eye className="w-5 h-5" />
+            </Link>
+          </td>
+        </tr>
+      );
+    }
+    return rows;
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -216,7 +258,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm">Today's Revenue</p>
-              <p className="text-3xl font-bold text-gray-900">{restaurant.currency} {stats.todayRevenue}</p>
+              <p className="text-3xl font-bold text-gray-900">{restaurant?.currency} {stats.todayRevenue}</p>
             </div>
             <DollarSign className="w-12 h-12 text-green-500 opacity-20" />
           </div>
@@ -245,7 +287,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Link
-          href={'/pos/' + restaurant.slug + '/admin/tables'}
+          href={'/pos/' + restaurant?.slug + '/admin/tables'}
           className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
         >
           <div className="flex items-center gap-4">
@@ -260,7 +302,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
         </Link>
 
         <Link
-          href={'/pos/' + restaurant.slug + '/menu'}
+          href={'/pos/' + restaurant?.slug + '/menu'}
           className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
         >
           <div className="flex items-center gap-4">
@@ -275,7 +317,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
         </Link>
 
         <Link
-          href={'/pos/' + restaurant.slug + '/admin/reports'}
+          href={'/pos/' + restaurant?.slug + '/admin/reports'}
           className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
         >
           <div className="flex items-center gap-4">
@@ -291,32 +333,31 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b-2 border-gray-200">
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Order ID</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Customer</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Type</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Total</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Time</th>
+                <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderOrderRows()}
+            </tbody>
+          </table>
           
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Order ID</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Customer</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Type</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Total</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Time</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {renderOrderRows()}
-              </tbody>
-            </table>
-            
-            {orders.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No orders yet. Create your first order!</p>
-              </div>
-            )}
-          </div>
+          {orders.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No orders yet. Create your first order!</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
