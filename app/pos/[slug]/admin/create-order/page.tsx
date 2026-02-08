@@ -407,7 +407,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                   <span className="font-semibold">{restaurant.currency} {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Tax ({restaurant.tax_rate}%)</span>
+                  <span className="text-gray-600">Tax ({restaurant.tax_rate || 0}%)</span>
                   <span className="font-semibold">{restaurant.currency} {tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t-2 border-gray-200 pt-2">
