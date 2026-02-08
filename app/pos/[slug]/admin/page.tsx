@@ -203,51 +203,31 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="p-6 max-w-7xl mx-auto">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">{restaurant.name}</h1>
-              <p className="text-orange-100">Admin Dashboard</p>
+              <p className="text-gray-600 text-sm">Today's Orders</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.todayOrders}</p>
             </div>
-            <Link
-              href={`/pos/${restaurant.slug}/admin/create-order`}
-              className="flex items-center gap-2 px-6 py-3 bg-white text-orange-600 rounded-xl hover:shadow-xl transition-all font-bold"
-            >
-              <Plus className="w-5 h-5" />
-              Create Order
-            </Link>
+            <ShoppingCart className="w-12 h-12 text-blue-500 opacity-20" />
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Today's Orders</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.todayOrders}</p>
-              </div>
-              <ShoppingCart className="w-12 h-12 text-blue-500 opacity-20" />
+        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm">Today's Revenue</p>
+              <p className="text-3xl font-bold text-gray-900">{restaurant.currency} {stats.todayRevenue}</p>
             </div>
+            <DollarSign className="w-12 h-12 text-green-500 opacity-20" />
           </div>
+        </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Today's Revenue</p>
-                <p className="text-3xl font-bold text-gray-900">{restaurant.currency} {stats.todayRevenue}</p>
-              </div>
-              <DollarSign className="w-12 h-12 text-green-500 opacity-20" />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-yellow-500">
-            <div className="flex items-center justify-between">
+        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-yellow-500">
+          <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Pending Orders</p>
                 <p className="text-3xl font-bold text-gray-900">{stats.pendingOrders}</p>

@@ -158,7 +158,8 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const calculateTotals = () => {
     const subtotal = cart.reduce((sum, item) => sum + Number(item.total), 0);
-    const tax = restaurant ? (subtotal * Number(restaurant.tax_rate)) / 100 : 0;
+    const taxRate = restaurant?.tax_rate ? Number(restaurant.tax_rate) : 0;
+    const tax = (subtotal * taxRate) / 100;
     const total = subtotal + tax;
     return { subtotal, tax, total };
   };
@@ -224,30 +225,8 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const { subtotal, tax, total } = calculateTotals();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href={`/pos/${restaurant.slug}/admin`} className="p-2 hover:bg-white/20 rounded-lg">
-                <ArrowLeft className="w-6 h-6" />
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold">Create New Order</h1>
-                <p className="text-orange-100 text-sm">{restaurant.name}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-xl">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="font-bold">{cart.length} items</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Menu Section */}
           <div className="lg:col-span-2">
             {/* Order Type Selection */}
