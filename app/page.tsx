@@ -111,63 +111,63 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="bg-gradient-to-br from-indigo-50 to-purple-50 py-20">
+      <section className="bg-gradient-to-br from-orange-50 to-red-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-bold mb-6 text-gray-900">Why Choose Loopwar?</h2>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Complete POS system with order tracking</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Real-time inventory management</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Detailed sales analytics and reports</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Table management for dine-in orders</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Multi-role access (Admin & Staff)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Easy menu customization</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Customer order history</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <span className="text-gray-700">Responsive design for all devices</span>
                 </li>
               </ul>
             </div>
-            <div className="bg-white/60 backdrop-blur-lg p-8 rounded-3xl border-2 border-indigo-200 shadow-xl">
+            <div className="bg-white/60 backdrop-blur-lg p-8 rounded-3xl border-2 border-orange-200 shadow-xl">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Stats</h3>
               <div className="space-y-6">
                 <div>
-                  <div className="text-4xl font-bold text-indigo-600">250+</div>
+                  <div className="text-4xl font-bold text-orange-600">250+</div>
                   <div className="text-gray-600">Features</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-purple-600">8</div>
+                  <div className="text-4xl font-bold text-red-600">8</div>
                   <div className="text-gray-600">Admin Modules</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-indigo-600">100%</div>
+                  <div className="text-4xl font-bold text-orange-600">100%</div>
                   <div className="text-gray-600">Cloud-Based</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-purple-600">24/7</div>
+                  <div className="text-4xl font-bold text-red-600">24/7</div>
                   <div className="text-gray-600">Access Anytime</div>
                 </div>
               </div>

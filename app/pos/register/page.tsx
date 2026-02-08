@@ -55,7 +55,7 @@ export default function POSRegisterPage() {
     };
 
     try {
-      const response = await fetch('https://loopwar.dev/api/restaurants', {
+      const response = await fetch('/api/restaurants', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
