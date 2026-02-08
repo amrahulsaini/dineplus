@@ -28,6 +28,14 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
+      
+      // Check authentication
+      const storedAuth = sessionStorage.getItem('admin_auth_' + resolvedParams.slug);
+      if (!storedAuth) {
+        router.push('/pos/' + resolvedParams.slug + '/admin');
+        return;
+      }
+      
       const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {

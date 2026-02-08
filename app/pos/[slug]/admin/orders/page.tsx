@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Eye, Clock, CheckCircle, XCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,6 +18,7 @@ interface Order {
 }
 
 export default function OrdersPage({ params }: { params: Promise<{ slug: string }> }) {
+  const router = useRouter();
   const [restaurant, setRestaurant] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,14 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
+      
+      // Check authentication
+      const storedAuth = sessionStorage.getItem('admin_auth_' + resolvedParams.slug);
+      if (!storedAuth) {
+        router.push('/pos/' + resolvedParams.slug + '/admin');
+        return;
+      }
+      
       const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       if (response.ok) {
         const data = await response.json();
@@ -41,7 +51,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     }, 10000);
     
     return () => clearInterval(interval);
-  }, [params, restaurant]);
+  }, [params, restaurant, router]);
 
   const loadOrders = async (restaurantId: string) => {
     const response = await fetch(`/api/orders?restaurantId=${restaurantId}&limit=100`);

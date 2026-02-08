@@ -62,10 +62,21 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showTableModal, setShowTableModal] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
+      
+      // Check authentication
+      const storedAuth = sessionStorage.getItem('admin_auth_' + resolvedParams.slug);
+      if (!storedAuth) {
+        router.push('/pos/' + resolvedParams.slug + '/admin');
+        return;
+      }
+      
+      setAuthenticated(true);
+      
       const response = await fetch('/api/restaurants/' + resolvedParams.slug);
       
       if (!response.ok) {
@@ -338,6 +349,10 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
         </div>
       </div>
     );
+  }
+
+  if (!authenticated) {
+    return null; // Will redirect in useEffect
   }
 
   let filteredItems: MenuItem[] = [];

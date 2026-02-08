@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
 
 interface MenuItem {
@@ -19,6 +20,7 @@ interface Category {
 }
 
 export default function MenuManagementPage({ params }: { params: Promise<{ slug: string }> }) {
+  const router = useRouter();
   const [restaurant, setRestaurant] = useState<any>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -39,6 +41,14 @@ export default function MenuManagementPage({ params }: { params: Promise<{ slug:
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
+      
+      // Check authentication
+      const storedAuth = sessionStorage.getItem('admin_auth_' + resolvedParams.slug);
+      if (!storedAuth) {
+        router.push('/pos/' + resolvedParams.slug + '/admin');
+        return;
+      }
+      
       const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       if (response.ok) {
         const data = await response.json();
@@ -51,7 +61,7 @@ export default function MenuManagementPage({ params }: { params: Promise<{ slug:
       setLoading(false);
     };
     init();
-  }, [params]);
+  }, [params, router]);
 
   const loadMenuItems = async (restaurantId: string) => {
     const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
