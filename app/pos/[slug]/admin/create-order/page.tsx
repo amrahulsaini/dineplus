@@ -159,7 +159,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const calculateTotals = () => {
     const subtotal = cart.reduce((sum, item) => sum + Number(item.total), 0);
     const taxRate = restaurant?.tax_rate ? Number(restaurant.tax_rate) : 0;
-    const tax = (subtotal * taxRate) / 100;
+    const tax = subtotal * taxRate * 0.01;
     const total = subtotal + tax;
     return { subtotal, tax, total };
   };
@@ -227,7 +227,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Menu Section */}
         <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <h3 className="font-bold text-lg mb-4">Order Type</h3>
@@ -436,7 +435,4 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
         </div>
       </div>
     </div>
-  );
-}
-
-
+  )

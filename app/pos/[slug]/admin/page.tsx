@@ -185,10 +185,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           </div>
         </div>
       </div>
-    );
-  }
-
-  if (!restaurant) return null;
+  )
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -246,54 +243,54 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Link
-            href={'/pos/' + restaurant.slug + '/admin/tables'}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-orange-100 rounded-xl">
-                <Package className="w-8 h-8 text-orange-600" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg text-gray-900">Table View</h3>
-                <p className="text-gray-600 text-sm">Manage table orders</p>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Link
+          href={'/pos/' + restaurant.slug + '/admin/tables'}
+          className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-orange-100 rounded-xl">
+              <Package className="w-8 h-8 text-orange-600" />
             </div>
-          </Link>
-
-          <Link
-            href={'/pos/' + restaurant.slug + '/menu'}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <Package className="w-8 h-8 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg text-gray-900">Menu Management</h3>
-                <p className="text-gray-600 text-sm">Edit menu items</p>
-              </div>
+            <div>
+              <h3 className="font-bold text-lg text-gray-900">Table View</h3>
+              <p className="text-gray-600 text-sm">Manage table orders</p>
             </div>
-          </Link>
+          </div>
+        </Link>
 
-          <Link
-            href={'/pos/' + restaurant.slug + '/admin/reports'}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <TrendingUp className="w-8 h-8 text-green-600" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg text-gray-900">Reports</h3>
-                <p className="text-gray-600 text-sm">View analytics</p>
-              </div>
+        <Link
+          href={'/pos/' + restaurant.slug + '/menu'}
+          className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-100 rounded-xl">
+              <Package className="w-8 h-8 text-blue-600" />
             </div>
-          </Link>
-        </div>
+            <div>
+              <h3 className="font-bold text-lg text-gray-900">Menu Management</h3>
+              <p className="text-gray-600 text-sm">Edit menu items</p>
+            </div>
+          </div>
+        </Link>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6">
+        <Link
+          href={'/pos/' + restaurant.slug + '/admin/reports'}
+          className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-2 border-orange-200 hover:border-orange-400"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-green-100 rounded-xl">
+              <TrendingUp className="w-8 h-8 text-green-600" />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg text-gray-900">Reports</h3>
+              <p className="text-gray-600 text-sm">View analytics</p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
           
           <div className="overflow-x-auto">
