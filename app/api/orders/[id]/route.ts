@@ -3,10 +3,10 @@ import pool from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     
     // Get order details
     const [orders]: any = await pool.query(
@@ -44,10 +44,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const body = await request.json();
     const { status, paymentStatus, paymentMethod } = body;
     
@@ -88,10 +88,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     
     // Delete order items and addons first (cascade should handle this)
     await pool.query('DELETE FROM orders WHERE id = ?', [id]);
