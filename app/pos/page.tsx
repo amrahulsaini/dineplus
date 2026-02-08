@@ -19,4 +19,4 @@ export default function POSRootPage() {
     </div>
   );
 }
-}
+
