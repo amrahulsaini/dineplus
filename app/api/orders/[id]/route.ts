@@ -79,6 +79,18 @@ export async function PUT(
     
     await pool.query(query, values);
     
+    // Update table status back to available if order is completed, delivered, or cancelled
+    if (status && ['completed', 'delivered', 'cancelled'].includes(status)) {
+      // Get the table_id from the order
+      const [orders]: any = await pool.query('SELECT table_id FROM orders WHERE id = ?', [id]);
+      if (orders.length > 0 && orders[0].table_id) {
+        await pool.query(
+          'UPDATE restaurant_tables SET status = "available" WHERE id = ?',
+          [orders[0].table_id]
+        );
+      }
+    }
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Database error:', error);

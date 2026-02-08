@@ -82,6 +82,14 @@ export async function POST(request: NextRequest) {
       }
     }
     
+    // Update table status to occupied if it's a dine-in order
+    if (orderType === 'dine-in' && tableId) {
+      await pool.query(
+        'UPDATE restaurant_tables SET status = "occupied" WHERE id = ?',
+        [tableId]
+      );
+    }
+    
     return NextResponse.json({ id: orderId, status: 'pending' }, { status: 201 });
   } catch (error) {
     console.error('Database error:', error);

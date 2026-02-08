@@ -186,6 +186,24 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     setShowTableModal(false);
   };
 
+  const handleTableStatusChange = async (tableId: string, newStatus: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent table selection when clicking status button
+    try {
+      const response = await fetch(`/api/tables/${tableId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      
+      if (response.ok) {
+        // Update local state
+        setTables(tables.map(t => t.id === tableId ? { ...t, status: newStatus } : t));
+      }
+    } catch (error) {
+      console.error('Error updating table status:', error);
+    }
+  };
+
   function renderCategoryButtons() {
     const buttons = [];
     for (let i = 0; i < categories.length; i++) {
@@ -314,7 +332,10 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   if (loading || !restaurant) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading restaurant data...</p>
+        </div>
       </div>
     );
   }
@@ -507,23 +528,42 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {tables.map((table) => (
-                    <button
-                      key={table.id}
-                      onClick={() => handleTableSelect(table.id)}
-                      className={`p-6 rounded-xl border-3 transition-all hover:shadow-lg ${
-                        selectedTable === table.id
-                          ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-500'
-                          : getStatusColor(table.status)
-                      }`}
-                    >
-                      <div className="text-center">
-                        <div className="text-3xl font-bold mb-2">{table.table_number}</div>
-                        <div className="text-sm font-semibold capitalize">{table.status}</div>
-                        {table.capacity && (
-                          <div className="text-xs text-gray-600 mt-1">{table.capacity} seats</div>
-                        )}
+                    <div key={table.id} className="relative">
+                      <button
+                        onClick={() => handleTableSelect(table.id)}
+                        className={`w-full p-6 rounded-xl border-3 transition-all hover:shadow-lg ${
+                          selectedTable === table.id
+                            ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-500'
+                            : getStatusColor(table.status)
+                        }`}
+                      >
+                        <div className="text-center">
+                          <div className="text-3xl font-bold mb-2">{table.table_number}</div>
+                          <div className="text-sm font-semibold capitalize mb-2">{table.status}</div>
+                          {table.capacity && (
+                            <div className="text-xs text-gray-600 mt-1">{table.capacity} seats</div>
+                          )}
+                        </div>
+                      </button>
+                      {/* Quick status change buttons */}
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                        <button
+                          onClick={(e) => handleTableStatusChange(table.id, 'available', e)}
+                          className="w-6 h-6 rounded-full bg-green-500 hover:bg-green-600 shadow-md"
+                          title="Set Available"
+                        />
+                        <button
+                          onClick={(e) => handleTableStatusChange(table.id, 'occupied', e)}
+                          className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 shadow-md"
+                          title="Set Occupied"
+                        />
+                        <button
+                          onClick={(e) => handleTableStatusChange(table.id, 'reserved', e)}
+                          className="w-6 h-6 rounded-full bg-yellow-500 hover:bg-yellow-600 shadow-md"
+                          title="Set Reserved"
+                        />
                       </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               )}

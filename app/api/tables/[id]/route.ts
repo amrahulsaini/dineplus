@@ -8,10 +8,43 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { tableNumber, tableName, capacity, isActive } = body;
+    const { tableNumber, tableName, capacity, status } = body;
     
-    const query = 'UPDATE restaurant_tables SET table_number = ?, location = ?, capacity = ?, status = ? WHERE id = ?';
-    await pool.query(query, [tableNumber, tableName, capacity || 4, isActive ? 'available' : 'occupied', id]);
+    // Build dynamic update query
+    const updates: string[] = [];
+    const values: any[] = [];
+    
+    if (tableNumber !== undefined) {
+      updates.push('table_number = ?');
+      values.push(tableNumber);
+    }
+    
+    if (tableName !== undefined) {
+      updates.push('location = ?');
+      values.push(tableName);
+    }
+    
+    if (capacity !== undefined) {
+      updates.push('capacity = ?');
+      values.push(capacity);
+    }
+    
+    if (status !== undefined) {
+      // Allow manual status change: available, occupied, reserved
+      if (['available', 'occupied', 'reserved'].includes(status)) {
+        updates.push('status = ?');
+        values.push(status);
+      }
+    }
+    
+    if (updates.length === 0) {
+      return NextResponse.json({ error: 'No updates provided' }, { status: 400 });
+    }
+    
+    const query = `UPDATE restaurant_tables SET ${updates.join(', ')} WHERE id = ?`;
+    values.push(id);
+    
+    await pool.query(query, values);
     
     return NextResponse.json({ success: true });
   } catch (error) {
