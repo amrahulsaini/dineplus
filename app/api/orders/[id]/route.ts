@@ -105,8 +105,20 @@ export async function DELETE(
   try {
     const { id } = await context.params;
     
-    // Delete order items and addons first (cascade should handle this)
+    // Get table_id before deleting to free up the table
+    const [orders]: any = await pool.query('SELECT table_id FROM orders WHERE id = ?', [id]);
+    const tableId = orders.length > 0 ? orders[0].table_id : null;
+    
+    // Delete order (cascade will delete order items and addons)
     await pool.query('DELETE FROM orders WHERE id = ?', [id]);
+    
+    // If order had a table, set it back to available
+    if (tableId) {
+      await pool.query(
+        'UPDATE restaurant_tables SET status = "available" WHERE id = ?',
+        [tableId]
+      );
+    }
     
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Eye, Clock, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 interface Order {
@@ -68,6 +68,28 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
       body: JSON.stringify({ status })
     });
     if (restaurant) await loadOrders(restaurant.id);
+  };
+
+  const deleteOrder = async (orderId: string, orderNumber: string) => {
+    if (!confirm(`Are you sure you want to permanently delete order #${orderNumber}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        alert('Order deleted successfully');
+        if (restaurant) await loadOrders(restaurant.id);
+      } else {
+        alert('Failed to delete order');
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      alert('Error deleting order');
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -140,7 +162,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               </div>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 <select
                   value={order.status}
                   onChange={(e) => updateOrderStatus(order.id, e.target.value)}
@@ -160,6 +182,13 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                   <Eye className="w-4 h-4" />
                   View
                 </Link>
+                <button
+                  onClick={() => deleteOrder(order.id, order.order_number || order.id.slice(0, 8))}
+                  className="flex items-center justify-center gap-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200"
+                  title="Delete Order"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
           ))}
