@@ -127,23 +127,23 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
 
   if (loading || !restaurant) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-cream-50 to-orange-50">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-cream-50 to-orange-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link
               href={`/pos/${restaurant.slug}/setup`}
-              className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+              className="p-2 hover:bg-orange-100 rounded-lg transition-colors"
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft className="w-6 h-6 text-gray-700" />
             </Link>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Categories</h1>
@@ -152,7 +152,7 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
           </div>
           <button
             onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:from-orange-600 hover:to-red-700 transition-colors shadow-lg"
           >
             <Plus className="w-5 h-5" />
             Add Category
