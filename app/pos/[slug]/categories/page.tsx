@@ -127,14 +127,14 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
 
   if (loading || !restaurant) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-cream-50 to-orange-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-cream-50 to-orange-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
