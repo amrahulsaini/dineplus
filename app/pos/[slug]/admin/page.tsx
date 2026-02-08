@@ -228,24 +228,24 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
         <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-yellow-500">
           <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Pending Orders</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.pendingOrders}</p>
-              </div>
-              <Clock className="w-12 h-12 text-yellow-500 opacity-20" />
+            <div>
+              <p className="text-gray-600 text-sm">Pending Orders</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.pendingOrders}</p>
             </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Completed</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.completedOrders}</p>
-              </div>
-              <CheckCircle className="w-12 h-12 text-purple-500 opacity-20" />
-            </div>
+            <Clock className="w-12 h-12 text-yellow-500 opacity-20" />
           </div>
         </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm">Completed</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.completedOrders}</p>
+            </div>
+            <CheckCircle className="w-12 h-12 text-purple-500 opacity-20" />
+          </div>
+        </div>
+      </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
