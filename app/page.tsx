@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield, Store, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, ShoppingBag, BarChart3, Settings, Zap, Shield, Store, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -107,38 +107,69 @@ export default function Home() {
             description="Enterprise-grade security with encrypted data and regular backups"
             color="purple"
           />
-          <FeatureCard
-            icon={<Shield className="w-8 h-8" />}
-            title="Secure & Reliable"
-            description="Each restaurant has unique credentials. Your data is secure with enterprise-grade security."
-          />
         </div>
       </section>
 
       {/* Benefits Section */}
-      <section className="bg-gradient-to-br from-cream-600 to-cream-700 py-20">
+      <section className="bg-gradient-to-br from-indigo-50 to-purple-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="text-[#1a1a1a]">
-              <h2 className="text-4xl font-bold mb-6">Why Choose Loopwar?</h2>
+            <div>
+              <h2 className="text-4xl font-bold mb-6 text-gray-900">Why Choose Loopwar?</h2>
               <ul className="space-y-4">
-                <BenefitItem text="Complete POS system with order tracking" />
-                <BenefitItem text="Real-time inventory management" />
-                <BenefitItem text="Detailed sales analytics and reports" />
-                <BenefitItem text="Table management for dine-in orders" />
-                <BenefitItem text="Multi-role access (Admin & Staff)" />
-                <BenefitItem text="Easy menu customization" />
-                <BenefitItem text="Customer order history" />
-                <BenefitItem text="Responsive design for all devices" />
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Complete POS system with order tracking</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Real-time inventory management</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Detailed sales analytics and reports</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Table management for dine-in orders</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Multi-role access (Admin & Staff)</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Easy menu customization</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Customer order history</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-700">Responsive design for all devices</span>
+                </li>
               </ul>
             </div>
-            <div className="bg-[#1a1a1a]/40 backdrop-blur-lg p-8 rounded-3xl border-2 border-[#1a1a1a]/30">
-              <h3 className="text-2xl font-bold text-[#1a1a1a] mb-6">Key Stats</h3>
+            <div className="bg-white/60 backdrop-blur-lg p-8 rounded-3xl border-2 border-indigo-200 shadow-xl">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Stats</h3>
               <div className="space-y-6">
-                <StatItem number="250+" label="Features" />
-                <StatItem number="8" label="Admin Modules" />
-                <StatItem number="100%" label="Cloud-Based" />
-                <StatItem number="24/7" label="Access Anytime" />
+                <div>
+                  <div className="text-4xl font-bold text-indigo-600">250+</div>
+                  <div className="text-gray-600">Features</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-purple-600">8</div>
+                  <div className="text-gray-600">Admin Modules</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-indigo-600">100%</div>
+                  <div className="text-gray-600">Cloud-Based</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-purple-600">24/7</div>
+                  <div className="text-gray-600">Access Anytime</div>
+                </div>
               </div>
             </div>
           </div>
