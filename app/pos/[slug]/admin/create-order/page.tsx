@@ -164,6 +164,99 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     return { subtotal, tax, total };
   };
 
+  function renderTableOptions() {
+    const availableTables = [];
+    for (let i = 0; i < tables.length; i++) {
+      if (tables[i].status === 'available') {
+        availableTables.push(
+          <option key={tables[i].id} value={tables[i].id}>
+            Table {tables[i].table_number}
+          </option>
+        );
+      }
+    }
+    return availableTables;
+  }
+
+  function renderCategoryButtons() {
+    const buttons = [];
+    for (let i = 0; i < categories.length; i++) {
+      const cat = categories[i];
+      const isSelected = selectedCategory === cat.id;
+      buttons.push(
+        <button
+          key={cat.id}
+          onClick={() => setSelectedCategory(cat.id)}
+          className={isSelected ? 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gradient-to-r from-orange-500 to-red-600 text-white' : 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200'}
+        >
+          {cat.name}
+        </button>
+      );
+    }
+    return buttons;
+  }
+
+  function renderMenuItems() {
+    const items = [];
+    for (let i = 0; i < filteredItems.length; i++) {
+      const item = filteredItems[i];
+      items.push(
+        <div
+          key={item.id}
+          onClick={() => addToCart(item)}
+          className="border-2 border-gray-200 rounded-xl p-4 hover:border-orange-400 cursor-pointer transition-all hover:shadow-lg"
+        >
+          <div className="flex justify-between items-start">
+            <div className="flex-1">
+              <h4 className="font-bold text-gray-900">{item.name}</h4>
+              {item.description && <p className="text-sm text-gray-600 mt-1">{item.description}</p>}
+              <p className="text-lg font-bold text-orange-600 mt-2">
+                {restaurant.currency} {item.base_price}
+              </p>
+            </div>
+            <button className="p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200">
+              <Plus className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return items;
+  }
+
+  function renderCartItems() {
+    const items = [];
+    for (let i = 0; i < cart.length; i++) {
+      const item = cart[i];
+      items.push(
+        <div key={item.menuItemId} className="border-2 border-gray-200 rounded-xl p-3">
+          <div className="flex justify-between items-start mb-2">
+            <div className="flex-1">
+              <h4 className="font-semibold text-sm">{item.name}</h4>
+              <p className="text-xs text-gray-600">{restaurant.currency} {item.unitPrice} each</p>
+            </div>
+            <button onClick={() => removeFromCart(item.menuItemId)} className="text-red-500 hover:text-red-700">
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button onClick={() => updateQuantity(item.menuItemId, -1)} className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200">
+                <Minus className="w-4 h-4" />
+              </button>
+              <span className="font-bold w-8 text-center">{item.quantity}</span>
+              <button onClick={() => updateQuantity(item.menuItemId, 1)} className="w-8 h-8 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center hover:bg-orange-200">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="font-bold">{restaurant.currency} {Number(item.total).toFixed(2)}</p>
+          </div>
+        </div>
+      );
+    }
+    return items;
+  }
+
   const handleCreateOrder = async () => {
     if (!restaurant || cart.length === 0) return;
     
@@ -231,19 +324,24 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <h3 className="font-bold text-lg mb-4">Order Type</h3>
               <div className="grid grid-cols-3 gap-4">
-                {(['dine-in', 'takeaway', 'delivery'] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setOrderType(type)}
-                    className={
-                      orderType === type
-                        ? 'py-3 px-4 rounded-xl font-semibold capitalize bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                        : 'py-3 px-4 rounded-xl font-semibold capitalize bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }
-                  >
-                    {type}
-                  </button>
-                ))}
+                <button
+                  onClick={() => setOrderType('dine-in')}
+                  className={orderType === 'dine-in' ? 'py-3 px-4 rounded-xl font-semibold capitalize bg-gradient-to-r from-orange-500 to-red-600 text-white' : 'py-3 px-4 rounded-xl font-semibold capitalize bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  dine-in
+                </button>
+                <button
+                  onClick={() => setOrderType('takeaway')}
+                  className={orderType === 'takeaway' ? 'py-3 px-4 rounded-xl font-semibold capitalize bg-gradient-to-r from-orange-500 to-red-600 text-white' : 'py-3 px-4 rounded-xl font-semibold capitalize bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  takeaway
+                </button>
+                <button
+                  onClick={() => setOrderType('delivery')}
+                  className={orderType === 'delivery' ? 'py-3 px-4 rounded-xl font-semibold capitalize bg-gradient-to-r from-orange-500 to-red-600 text-white' : 'py-3 px-4 rounded-xl font-semibold capitalize bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  delivery
+                </button>
               </div>
 
               {orderType === 'dine-in' && (
@@ -255,9 +353,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
                   >
                     <option value="">Choose a table</option>
-                    {tables.filter(t => t.status === 'available').map(table => (
-                      <option key={table.id} value={table.id}>Table {table.table_number}</option>
-                    ))}
+                    {renderTableOptions()}
                   </select>
                 </div>
               )}
@@ -275,47 +371,14 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 >
                   All Items
                 </button>
-                {categories.map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={
-                      selectedCategory === cat.id
-                        ? 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                        : 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }
-                  >
-                    {cat.name}
-                  </button>
-                ))}
+                {renderCategoryButtons()}
               </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="font-bold text-lg mb-4">Menu Items</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredItems.map(item => (
-                  <div
-                    key={item.id}
-                    onClick={() => addToCart(item)}
-                    className="border-2 border-gray-200 rounded-xl p-4 hover:border-orange-400 cursor-pointer transition-all hover:shadow-lg"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h4 className="font-bold text-gray-900">{item.name}</h4>
-                        {item.description && (
-                          <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                        )}
-                        <p className="text-lg font-bold text-orange-600 mt-2">
-                          {restaurant.currency} {item.base_price}
-                        </p>
-                      </div>
-                      <button className="p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200">
-                        <Plus className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                {renderMenuItems()}
               </div>
 
               {filteredItems.length === 0 && (
@@ -331,40 +394,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               <h3 className="font-bold text-lg mb-4">Order Summary</h3>
 
               <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
-                {cart.map(item => (
-                  <div key={item.menuItemId} className="border-2 border-gray-200 rounded-xl p-3">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-sm">{item.name}</h4>
-                        <p className="text-xs text-gray-600">{restaurant.currency} {item.unitPrice} each</p>
-                      </div>
-                      <button
-                        onClick={() => removeFromCart(item.menuItemId)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => updateQuantity(item.menuItemId, -1)}
-                          className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="font-bold w-8 text-center">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.menuItemId, 1)}
-                          className="w-8 h-8 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center hover:bg-orange-200"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <p className="font-bold">{restaurant.currency} {Number(item.total).toFixed(2)}</p>
-                    </div>
-                  </div>
-                ))}
+                {renderCartItems()}
 
                 {cart.length === 0 && (
                   <div className="text-center py-8 text-gray-500">

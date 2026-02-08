@@ -307,31 +307,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-mono text-sm">#{order.id.slice(0, 8)}</td>
-                    <td className="py-4 px-4">{order.customer_name || 'Walk-in'}</td>
-                    <td className="py-4 px-4 capitalize">{order.order_type}</td>
-                    <td className="py-4 px-4">
-                      <span className={"px-3 py-1 rounded-full text-xs font-semibold " + getStatusColor(order.status)}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 font-bold">{restaurant.currency} {order.total}</td>
-                    <td className="py-4 px-4 text-sm text-gray-600">
-                      {new Date(order.created_at).toLocaleTimeString()}
-                    </td>
-                    <td className="py-4 px-4">
-                      <Link
-                        href={'/pos/' + restaurant.slug + '/admin/orders/' + order.id}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                {renderOrderRows()}
               </tbody>
             </table>
             
