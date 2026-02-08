@@ -36,10 +36,10 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`https://loopwar.dev/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {
-        router.push('https://loopwar.dev/login');
+        router.push('/pos/login');
         return;
       }
       
@@ -54,7 +54,7 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
 
   const loadTables = async (restaurantId: string) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/tables?restaurantId=${restaurantId}`);
+      const response = await fetch(`/api/tables?restaurantId=${restaurantId}`);
       const data = await response.json();
       setTables(data);
     } catch (error) {
@@ -68,7 +68,7 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
     if (!restaurant || !formData.tableNumber) return;
     
     try {
-      const response = await fetch('https://loopwar.dev/api/tables', {
+      const response = await fetch('/api/tables', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,7 +91,7 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
 
   const handleUpdate = async (table: Table) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/tables/${table.id}`, {
+      const response = await fetch(`/api/tables/${table.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -114,7 +114,7 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
     if (!confirm('Are you sure you want to delete this table?')) return;
     
     try {
-      const response = await fetch(`https://loopwar.dev/api/tables/${id}`, {
+      const response = await fetch(`/api/tables/${id}`, {
         method: 'DELETE'
       });
       

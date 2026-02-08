@@ -32,10 +32,10 @@ export default function DashboardPage({ params }: { params: Promise<{ slug: stri
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`https://loopwar.dev/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {
-        router.push('https://loopwar.dev/login');
+        router.push('/pos/login');
         return;
       }
       
@@ -51,10 +51,10 @@ export default function DashboardPage({ params }: { params: Promise<{ slug: stri
   const loadStats = async (restaurantId: string) => {
     try {
       const [categoriesRes, menuRes, tablesRes, inventoryRes] = await Promise.all([
-        fetch(`https://loopwar.dev/api/categories?restaurantId=${restaurantId}`),
-        fetch(`https://loopwar.dev/api/menu?restaurantId=${restaurantId}`),
-        fetch(`https://loopwar.dev/api/tables?restaurantId=${restaurantId}`),
-        fetch(`https://loopwar.dev/api/inventory?restaurantId=${restaurantId}`)
+        fetch(`/api/categories?restaurantId=${restaurantId}`),
+        fetch(`/api/menu?restaurantId=${restaurantId}`),
+        fetch(`/api/tables?restaurantId=${restaurantId}`),
+        fetch(`/api/inventory?restaurantId=${restaurantId}`)
       ]);
 
       const categories = await categoriesRes.json();

@@ -38,10 +38,10 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`https://loopwar.dev/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {
-        router.push('https://loopwar.dev/login');
+        router.push('/pos/login');
         return;
       }
       
@@ -56,7 +56,7 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
 
   const loadInventory = async (restaurantId: string) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/inventory?restaurantId=${restaurantId}`);
+      const response = await fetch(`/api/inventory?restaurantId=${restaurantId}`);
       const data = await response.json();
       setInventory(data);
     } catch (error) {
@@ -70,7 +70,7 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
     if (!restaurant || !formData.itemName.trim() || !formData.unit.trim()) return;
     
     try {
-      const response = await fetch('https://loopwar.dev/api/inventory', {
+      const response = await fetch('/api/inventory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -95,7 +95,7 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
 
   const handleUpdate = async (item: InventoryItem) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/inventory/${item.id}`, {
+      const response = await fetch(`/api/inventory/${item.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -119,7 +119,7 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
     if (!confirm('Are you sure you want to delete this inventory item?')) return;
     
     try {
-      const response = await fetch(`https://loopwar.dev/api/inventory/${id}`, {
+      const response = await fetch(`/api/inventory/${id}`, {
         method: 'DELETE'
       });
       

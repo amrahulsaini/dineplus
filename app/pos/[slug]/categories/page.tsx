@@ -35,10 +35,10 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`https://loopwar.dev/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {
-        router.push('https://loopwar.dev/login');
+        router.push('/pos/login');
         return;
       }
       
@@ -53,7 +53,7 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
 
   const loadCategories = async (restaurantId: string) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/categories?restaurantId=${restaurantId}`);
+      const response = await fetch(`/api/categories?restaurantId=${restaurantId}`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -67,7 +67,7 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
     if (!restaurant || !formData.name.trim()) return;
     
     try {
-      const response = await fetch('https://loopwar.dev/api/categories', {
+      const response = await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -90,7 +90,7 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
 
   const handleUpdate = async (category: Category) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/categories/${category.id}`, {
+      const response = await fetch(`/api/categories/${category.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -113,7 +113,7 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
     if (!confirm('Are you sure you want to delete this category?')) return;
     
     try {
-      const response = await fetch(`https://loopwar.dev/api/categories/${id}`, {
+      const response = await fetch(`/api/categories/${id}`, {
         method: 'DELETE'
       });
       

@@ -49,10 +49,10 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   useEffect(() => {
     const init = async () => {
       const resolvedParams = await params;
-      const response = await fetch(`https://loopwar.dev/api/restaurants/${resolvedParams.slug}`);
+      const response = await fetch(`/api/restaurants/${resolvedParams.slug}`);
       
       if (!response.ok) {
-        router.push('https://loopwar.dev/login');
+        router.push('/pos/login');
         return;
       }
       
@@ -70,7 +70,7 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
 
   const loadMenuItems = async (restaurantId: string) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/menu?restaurantId=${restaurantId}`);
+      const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
       const data = await response.json();
       setMenuItems(data);
     } catch (error) {
@@ -82,7 +82,7 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
 
   const loadCategories = async (restaurantId: string) => {
     try {
-      const response = await fetch(`https://loopwar.dev/api/categories?restaurantId=${restaurantId}`);
+      const response = await fetch(`/api/categories?restaurantId=${restaurantId}`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -94,7 +94,7 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
     if (!restaurant || !formData.name.trim() || !formData.categoryId || !formData.basePrice) return;
     
     try {
-      const response = await fetch('https://loopwar.dev/api/menu', {
+      const response = await fetch('/api/menu', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -122,7 +122,7 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
     if (!confirm('Are you sure you want to delete this menu item?')) return;
     
     try {
-      const response = await fetch(`https://loopwar.dev/api/menu/${id}`, {
+      const response = await fetch(`/api/menu/${id}`, {
         method: 'DELETE'
       });
       
