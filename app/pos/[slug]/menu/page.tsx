@@ -39,6 +39,8 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   const [showAddForm, setShowAddForm] = useState(false);
   const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -109,28 +111,51 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   const handleAdd = async () => {
     if (!restaurant || !formData.name.trim() || !formData.categoryId || !formData.basePrice) return;
     
+    console.log('🚀 Attempting to add menu item:', formData);
+    
+    setSaveLoading(true);
+    setError(null);
+    
     try {
+      const payload = {
+        restaurantId: restaurant.id,
+        categoryId: formData.categoryId,
+        name: formData.name,
+        description: formData.description,
+        basePrice: parseFloat(formData.basePrice),
+        isVeg: formData.isVeg,
+        preparationTime: formData.preparationTime
+      };
+      
+      console.log('📤 Sending POST to /api/menu with payload:', payload);
+      
       const response = await fetch('/api/menu', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          restaurantId: restaurant.id,
-          categoryId: formData.categoryId,
-          name: formData.name,
-          description: formData.description,
-          basePrice: parseFloat(formData.basePrice),
-          isVeg: formData.isVeg,
-          preparationTime: formData.preparationTime
-        })
+        body: JSON.stringify(payload)
       });
       
+      console.log('📥 Response status:', response.status);
+      const responseData = await response.json();
+      console.log('📥 Response data:', responseData);
+      
       if (response.ok) {
+        console.log('✅ Menu item added successfully!');
         await loadMenuItems(restaurant.id);
         setFormData({ name: '', description: '', basePrice: '', categoryId: '', isVeg: false, preparationTime: 15 });
         setShowAddForm(false);
+        alert('Menu item added successfully!');
+      } else {
+        console.error('❌ Failed to add menu item:', responseData);
+        setError(responseData.error || 'Failed to add menu item');
+        alert(`Error: ${responseData.error || 'Failed to add menu item'}`);
       }
     } catch (error) {
-      console.error('Error adding menu item:', error);
+      console.error('❌ Error adding menu item:', error);
+      setError('Network error - check console');
+      alert('Error adding menu item. Check browser console for details.');
+    } finally {
+      setSaveLoading(false);
     }
   };
 
@@ -153,25 +178,50 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   const handleAddCategory = async () => {
     if (!restaurant || !categoryFormData.name.trim()) return;
     
+    console.log('🚀 Attempting to add category:', categoryFormData);
+    console.log('🔗 Restaurant ID:', restaurant.id);
+    
+    setSaveLoading(true);
+    setError(null);
+    
     try {
+      const payload = {
+        restaurantId: restaurant.id,
+        name: categoryFormData.name,
+        description: categoryFormData.description,
+        displayOrder: categories.length
+      };
+      
+      console.log('📤 Sending POST to /api/categories with payload:', payload);
+      
       const response = await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          restaurantId: restaurant.id,
-          name: categoryFormData.name,
-          description: categoryFormData.description,
-          displayOrder: categories.length
-        })
+        body: JSON.stringify(payload)
       });
       
+      console.log('📥 Response status:', response.status, response.statusText);
+      
+      const responseData = await response.json();
+      console.log('📥 Response data:', responseData);
+      
       if (response.ok) {
+        console.log('✅ Category added successfully!');
         await loadCategories(restaurant.id);
         setCategoryFormData({ name: '', description: '' });
         setShowAddCategoryForm(false);
+        alert('Category added successfully!');
+      } else {
+        console.error('❌ Failed to add category:', responseData);
+        setError(responseData.error || 'Failed to add category');
+        alert(`Error: ${responseData.error || 'Failed to add category'}`);
       }
     } catch (error) {
-      console.error('Error adding category:', error);
+      console.error('❌ Error adding category:', error);
+      setError('Network error - check console');
+      alert('Error adding category. Check browser console for details.');
+    } finally {
+      setSaveLoading(false);
     }
   };
 
@@ -286,20 +336,27 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
             <div className="flex gap-2">
               <button
                 onClick={handleAddCategory}
-                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:shadow-lg"
+                disabled={saveLoading}
+                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Category
+                {saveLoading ? 'Saving...' : 'Save Category'}
               </button>
               <button
                 onClick={() => {
                   setShowAddCategoryForm(false);
                   setCategoryFormData({ name: '', description: '' });
+                  setError(null);
                 }}
                 className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
               >
                 Cancel
               </button>
             </div>
+            {error && (
+              <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
           </div>
         )}
 
@@ -361,20 +418,27 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
             <div className="flex gap-2">
               <button
                 onClick={handleAdd}
-                className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                disabled={saveLoading}
+                className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save
+                {saveLoading ? 'Saving...' : 'Save'}
               </button>
               <button
                 onClick={() => {
                   setShowAddForm(false);
                   setFormData({ name: '', description: '', basePrice: '', categoryId: '', isVeg: false, preparationTime: 15 });
+                  setError(null);
                 }}
                 className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
               >
                 Cancel
               </button>
             </div>
+            {error && (
+              <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
           </div>
         )}
 

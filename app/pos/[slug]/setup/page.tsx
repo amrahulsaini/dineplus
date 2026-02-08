@@ -80,36 +80,27 @@ export default function POSSetupPage({ params }: SetupPageProps) {
 
         {/* Setup Steps */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Step 1: Categories */}
+          {/* Step 1: Menu & Categories */}
           <SetupCard
-            title="1. Add Categories"
-            description="Create menu categories like Starters, Main Course, Beverages"
-            icon={<UtensilsCrossed className="w-8 h-8" />}
-            isComplete={setupSteps.categories}
-            href={`/pos/${slug}/categories`}
-          />
-
-          {/* Step 2: Menu Items */}
-          <SetupCard
-            title="2. Add Menu Items"
-            description="Add dishes with prices, variations, and addons"
+            title="1. Menu & Categories"
+            description="Add categories and menu items all in one place"
             icon={<UtensilsCrossed className="w-8 h-8" />}
             isComplete={setupSteps.menu}
             href={`/pos/${slug}/menu`}
           />
 
-          {/* Step 3: Tables */}
+          {/* Step 2: Tables */}
           <SetupCard
-            title="3. Set Up Tables"
+            title="2. Set Up Tables"
             description="Configure your restaurant tables and seating"
             icon={<Armchair className="w-8 h-8" />}
             isComplete={setupSteps.tables}
             href={`/pos/${slug}/tables`}
           />
 
-          {/* Step 4: Inventory */}
+          {/* Step 3: Inventory */}
           <SetupCard
-            title="4. Add Inventory"
+            title="3. Add Inventory"
             description="Track ingredients and stock levels (Optional)"
             icon={<Package className="w-8 h-8" />}
             isComplete={setupSteps.inventory}
@@ -142,8 +133,8 @@ export default function POSSetupPage({ params }: SetupPageProps) {
         <div className="mt-8 bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-orange-200">
           <h3 className="font-bold text-lg mb-3 text-gray-900">💡 Getting Started Tips:</h3>
           <ul className="space-y-2 text-gray-700">
-            <li>✅ Start by adding at least 2-3 categories</li>
-            <li>✅ Add 5-10 menu items with proper pricing</li>
+            <li>✅ Go to Menu & Categories to add your food items</li>
+            <li>✅ Create categories and add menu items in one place</li>
             <li>✅ Configure your tables for better order management</li>
             <li>✅ Inventory is optional but helps track stock</li>
           </ul>
