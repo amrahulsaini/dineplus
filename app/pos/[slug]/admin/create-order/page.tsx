@@ -328,7 +328,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     <div className="p-6 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <h3 className="font-bold text-lg mb-4">Order Type</h3>
               <div className="grid grid-cols-3 gap-4">
                 <button
