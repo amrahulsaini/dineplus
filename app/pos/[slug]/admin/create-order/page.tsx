@@ -237,11 +237,11 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                   <button
                     key={type}
                     onClick={() => setOrderType(type)}
-                    className={`py-3 px-4 rounded-xl font-semibold capitalize ${
+                    className={
                       orderType === type
-                        ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                        ? 'py-3 px-4 rounded-xl font-semibold capitalize bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                        : 'py-3 px-4 rounded-xl font-semibold capitalize bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }
                   >
                     {type}
                   </button>
@@ -270,11 +270,11 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               <div className="flex gap-2 overflow-x-auto pb-2">
                 <button
                   onClick={() => setSelectedCategory('all')}
-                  className={`px-6 py-2 rounded-xl font-semibold whitespace-nowrap ${
+                  className={
                     selectedCategory === 'all'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                      ? 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                      : 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }
                 >
                   All Items
                 </button>
@@ -282,11 +282,11 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-6 py-2 rounded-xl font-semibold whitespace-nowrap ${
+                    className={
                       selectedCategory === cat.id
-                        ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                        ? 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                        : 'px-6 py-2 rounded-xl font-semibold whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }
                   >
                     {cat.name}
                   </button>
@@ -447,3 +447,4 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     </div>
   );
 }
+
