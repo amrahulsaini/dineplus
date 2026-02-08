@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Restaurant ID required' }, { status: 400 });
     }
     
-    const query = 'SELECT id, name, description, display_order, is_active, created_at FROM categories WHERE restaurant_id = ? ORDER BY display_order ASC';
+    const query = 'SELECT id, name, description, display_order, is_active, created_at FROM menu_categories WHERE restaurant_id = ? ORDER BY display_order ASC';
     console.log('📊 Executing query for restaurant:', restaurantId);
     
     const [rows]: any = await pool.query(query, [restaurantId]);
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const categoryId = uuidv4();
     console.log('🆔 Generated category ID:', categoryId);
     
-    const query = 'INSERT INTO categories (id, restaurant_id, name, description, display_order, is_active) VALUES (?, ?, ?, ?, ?, true)';
+    const query = 'INSERT INTO menu_categories (id, restaurant_id, name, description, display_order, is_active) VALUES (?, ?, ?, ?, ?, true)';
     console.log('📊 Executing query:', query);
     console.log('📊 Query params:', [categoryId, restaurantId, name, description || null, displayOrder || 0]);
     

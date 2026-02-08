@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Restaurant ID required' }, { status: 400 });
     }
     
-    const query = 'SELECT id, restaurant_id, table_number, table_name, capacity, qr_code, is_active, created_at FROM tables WHERE restaurant_id = ? ORDER BY table_number ASC';
+    const query = 'SELECT id, restaurant_id, table_number, capacity, location, qr_code, status, created_at FROM restaurant_tables WHERE restaurant_id = ? ORDER BY table_number ASC';
     const [rows]: any = await pool.query(query, [restaurantId]);
     
     return NextResponse.json(rows);
@@ -32,18 +32,18 @@ export async function POST(request: NextRequest) {
     
     const tableId = uuidv4();
     const qrCode = `${restaurantId}-T${tableNumber}`;
-    const query = 'INSERT INTO tables (id, restaurant_id, table_number, table_name, capacity, qr_code, is_active) VALUES (?, ?, ?, ?, ?, ?, true)';
+    const query = 'INSERT INTO restaurant_tables (id, restaurant_id, table_number, capacity, location, qr_code, status) VALUES (?, ?, ?, ?, ?, ?, "available")';
     
-    await pool.query(query, [tableId, restaurantId, tableNumber, tableName || `Table ${tableNumber}`, capacity || 4, qrCode]);
+    await pool.query(query, [tableId, restaurantId, tableNumber, capacity || 4, tableName || null, qrCode]);
     
     return NextResponse.json({
       id: tableId,
       restaurantId,
       tableNumber,
-      tableName: tableName || `Table ${tableNumber}`,
+      location: tableName,
       capacity: capacity || 4,
       qrCode,
-      isActive: true
+      status: 'available'
     }, { status: 201 });
   } catch (error) {
     console.error('Database error:', error);

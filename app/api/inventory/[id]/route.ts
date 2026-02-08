@@ -10,7 +10,7 @@ export async function PUT(
     const body = await request.json();
     const { itemName, unit, currentStock, minStockLevel, unitPrice } = body;
     
-    const query = 'UPDATE inventory SET item_name = ?, unit = ?, current_stock = ?, min_stock_level = ?, unit_price = ? WHERE id = ?';
+    const query = 'UPDATE inventory SET item_name = ?, unit = ?, quantity = ?, min_quantity = ?, cost_price = ? WHERE id = ?';
     await pool.query(query, [itemName, unit, currentStock || 0, minStockLevel || 0, unitPrice || 0, id]);
     
     return NextResponse.json({ success: true });

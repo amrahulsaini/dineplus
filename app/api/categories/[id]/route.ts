@@ -10,7 +10,7 @@ export async function PUT(
     const body = await request.json();
     const { name, description, displayOrder, isActive } = body;
     
-    const query = 'UPDATE categories SET name = ?, description = ?, display_order = ?, is_active = ? WHERE id = ?';
+    const query = 'UPDATE menu_categories SET name = ?, description = ?, display_order = ?, is_active = ? WHERE id = ?';
     await pool.query(query, [name, description || null, displayOrder || 0, isActive !== false, id]);
     
     return NextResponse.json({ success: true });
@@ -26,7 +26,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const query = 'DELETE FROM categories WHERE id = ?';
+    const query = 'DELETE FROM menu_categories WHERE id = ?';
     await pool.query(query, [id]);
     
     return NextResponse.json({ success: true });

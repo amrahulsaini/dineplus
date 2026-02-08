@@ -13,10 +13,10 @@ export async function GET(request: NextRequest) {
     }
     
     let query = `SELECT m.id, m.restaurant_id, m.category_id, m.name, m.description, m.base_price, 
-                 m.image_url, m.is_active, m.is_veg, m.preparation_time, m.created_at,
+                 m.image, m.is_available as is_active, m.is_vegetarian as is_veg, m.preparation_time, m.created_at,
                  c.name as category_name
                  FROM menu_items m 
-                 LEFT JOIN categories c ON m.category_id = c.id 
+                 LEFT JOIN menu_categories c ON m.category_id = c.id 
                  WHERE m.restaurant_id = ?`;
     const params: any[] = [restaurantId];
     
@@ -32,14 +32,14 @@ export async function GET(request: NextRequest) {
     // Get variations for each menu item
     for (const item of rows) {
       const [variations]: any = await pool.query(
-        'SELECT id, name, price, is_default FROM menu_variations WHERE menu_item_id = ? ORDER BY price ASC',
+        'SELECT id, name, price, is_default FROM menu_item_variations WHERE menu_item_id = ? ORDER BY price ASC',
         [item.id]
       );
       item.variations = variations;
       
       // Get addons
       const [addons]: any = await pool.query(
-        'SELECT id, name, price FROM menu_addons WHERE menu_item_id = ? ORDER BY name ASC',
+        'SELECT id, name, price FROM menu_item_addons WHERE menu_item_id = ? ORDER BY name ASC',
         [item.id]
       );
       item.addons = addons;
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
     
     const menuItemId = uuidv4();
-    const query = `INSERT INTO menu_items (id, restaurant_id, category_id, name, description, base_price, is_veg, preparation_time, is_active) 
+    const query = `INSERT INTO menu_items (id, restaurant_id, category_id, name, description, base_price, is_vegetarian, preparation_time, is_available) 
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, true)`;
     
     await pool.query(query, [menuItemId, restaurantId, categoryId, name, description || null, basePrice, isVeg || false, preparationTime || 15]);
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       for (const variation of variations) {
         const variationId = uuidv4();
         await pool.query(
-          'INSERT INTO menu_variations (id, menu_item_id, name, price, is_default) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO menu_item_variations (id, menu_item_id, name, price, is_default) VALUES (?, ?, ?, ?, ?)',
           [variationId, menuItemId, variation.name, variation.price, variation.isDefault || false]
         );
       }

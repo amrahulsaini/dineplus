@@ -10,8 +10,8 @@ export async function PUT(
     const body = await request.json();
     const { tableNumber, tableName, capacity, isActive } = body;
     
-    const query = 'UPDATE tables SET table_number = ?, table_name = ?, capacity = ?, is_active = ? WHERE id = ?';
-    await pool.query(query, [tableNumber, tableName, capacity || 4, isActive !== false, id]);
+    const query = 'UPDATE restaurant_tables SET table_number = ?, location = ?, capacity = ?, status = ? WHERE id = ?';
+    await pool.query(query, [tableNumber, tableName, capacity || 4, isActive ? 'available' : 'occupied', id]);
     
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -26,7 +26,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const query = 'DELETE FROM tables WHERE id = ?';
+    const query = 'DELETE FROM restaurant_tables WHERE id = ?';
     await pool.query(query, [id]);
     
     return NextResponse.json({ success: true });

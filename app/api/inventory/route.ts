@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Restaurant ID required' }, { status: 400 });
     }
     
-    const query = 'SELECT id, restaurant_id, item_name, unit, current_stock, min_stock_level, unit_price, created_at FROM inventory WHERE restaurant_id = ? ORDER BY item_name ASC';
+    const query = 'SELECT id, restaurant_id, item_name, unit, quantity as current_stock, min_quantity as min_stock_level, cost_price as unit_price, created_at FROM inventory WHERE restaurant_id = ? ORDER BY item_name ASC';
     const [rows]: any = await pool.query(query, [restaurantId]);
     
     return NextResponse.json(rows);
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
     
     const inventoryId = uuidv4();
-    const query = 'INSERT INTO inventory (id, restaurant_id, item_name, unit, current_stock, min_stock_level, unit_price) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO inventory (id, restaurant_id, item_name, unit, quantity, min_quantity, cost_price) VALUES (?, ?, ?, ?, ?, ?, ?)';
     
     await pool.query(query, [inventoryId, restaurantId, itemName, unit, currentStock || 0, minStockLevel || 0, unitPrice || 0]);
     
