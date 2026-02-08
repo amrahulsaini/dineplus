@@ -25,6 +25,8 @@ interface Table {
   id: string;
   table_number: string;
   status: string;
+  capacity?: number;
+  location?: string;
 }
 
 interface CartItem {
@@ -59,6 +61,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showTableModal, setShowTableModal] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -164,18 +167,24 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     return { subtotal, tax, total };
   };
 
-  function renderTableOptions() {
-    const availableTables = [];
-    for (let i = 0; i < tables.length; i++) {
-      // Show all tables, not just available ones
-      availableTables.push(
-        <option key={tables[i].id} value={tables[i].id}>
-          Table {tables[i].table_number} {tables[i].status !== 'available' ? `(${tables[i].status})` : ''}
-        </option>
-      );
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'available': return 'bg-green-100 border-green-500 text-green-800';
+      case 'occupied': return 'bg-red-100 border-red-500 text-red-800';
+      case 'reserved': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
+      default: return 'bg-gray-100 border-gray-500 text-gray-800';
     }
-    return availableTables;
-  }
+  };
+
+  const getSelectedTableName = () => {
+    const table = tables.find(t => t.id === selectedTable);
+    return table ? `Table ${table.table_number}` : 'Select Table';
+  };
+
+  const handleTableSelect = (tableId: string) => {
+    setSelectedTable(tableId);
+    setShowTableModal(false);
+  };
 
   function renderCategoryButtons() {
     const buttons = [];
@@ -353,14 +362,16 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               {orderType === 'dine-in' && (
                 <div className="mt-4">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Select Table *</label>
-                  <select
-                    value={selectedTable}
-                    onChange={(e) => setSelectedTable(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
+                  <button
+                    type="button"
+                    onClick={() => setShowTableModal(true)}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none hover:bg-gray-50 text-left flex justify-between items-center"
                   >
-                    <option value="">Choose a table</option>
-                    {renderTableOptions()}
-                  </select>
+                    <span className={selectedTable ? 'text-gray-900' : 'text-gray-500'}>{getSelectedTableName()}</span>
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
                   {tables.length === 0 && (
                     <p className="text-sm text-red-500 mt-2">No tables found. Please add tables first.</p>
                   )}
@@ -472,6 +483,63 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
       </div>
+
+      {/* Table Selection Modal */}
+      {showTableModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-gray-900">Select Table</h3>
+              <button
+                onClick={() => setShowTableModal(false)}
+                className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+              {tables.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg mb-4">No tables found</p>
+                  <p className="text-gray-400">Please add tables to your restaurant first.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {tables.map((table) => (
+                    <button
+                      key={table.id}
+                      onClick={() => handleTableSelect(table.id)}
+                      className={`p-6 rounded-xl border-3 transition-all hover:shadow-lg ${
+                        selectedTable === table.id
+                          ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-500'
+                          : getStatusColor(table.status)
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="text-3xl font-bold mb-2">{table.table_number}</div>
+                        <div className="text-sm font-semibold capitalize">{table.status}</div>
+                        {table.capacity && (
+                          <div className="text-xs text-gray-600 mt-1">{table.capacity} seats</div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
+              <button
+                onClick={() => setShowTableModal(false)}
+                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
