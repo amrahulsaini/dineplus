@@ -54,10 +54,15 @@ export default function CategoriesPage({ params }: { params: Promise<{ slug: str
   const loadCategories = async (restaurantId: string) => {
     try {
       const response = await fetch(`/api/categories?restaurantId=${restaurantId}`);
-      const data = await response.json();
-      setCategories(data);
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(Array.isArray(data) ? data : []);
+      } else {
+        setCategories([]);
+      }
     } catch (error) {
       console.error('Error loading categories:', error);
+      setCategories([]);
     } finally {
       setLoading(false);
     }
