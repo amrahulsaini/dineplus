@@ -167,13 +167,12 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   function renderTableOptions() {
     const availableTables = [];
     for (let i = 0; i < tables.length; i++) {
-      if (tables[i].status === 'available') {
-        availableTables.push(
-          <option key={tables[i].id} value={tables[i].id}>
-            Table {tables[i].table_number}
-          </option>
-        );
-      }
+      // Show all tables, not just available ones
+      availableTables.push(
+        <option key={tables[i].id} value={tables[i].id}>
+          Table {tables[i].table_number} {tables[i].status !== 'available' ? `(${tables[i].status})` : ''}
+        </option>
+      );
     }
     return availableTables;
   }
@@ -362,6 +361,9 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                     <option value="">Choose a table</option>
                     {renderTableOptions()}
                   </select>
+                  {tables.length === 0 && (
+                    <p className="text-sm text-red-500 mt-2">No tables found. Please add tables first.</p>
+                  )}
                 </div>
               )}
             </div>
