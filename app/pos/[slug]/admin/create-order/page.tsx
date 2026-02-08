@@ -123,19 +123,20 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const addToCart = (item: MenuItem) => {
     const existing = cart.find(c => c.menuItemId === item.id);
+    const basePrice = Number(item.base_price);
     if (existing) {
       setCart(cart.map(c => 
         c.menuItemId === item.id 
-          ? { ...c, quantity: c.quantity + 1, total: (c.quantity + 1) * c.unitPrice }
+          ? { ...c, quantity: c.quantity + 1, total: Number(((c.quantity + 1) * c.unitPrice).toFixed(2)) }
           : c
       ));
     } else {
       setCart([...cart, {
         menuItemId: item.id,
         name: item.name,
-        unitPrice: item.base_price,
+        unitPrice: basePrice,
         quantity: 1,
-        total: item.base_price
+        total: basePrice
       }]);
     }
   };
@@ -145,7 +146,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
       if (item.menuItemId === menuItemId) {
         const newQty = item.quantity + change;
         if (newQty <= 0) return item;
-        return { ...item, quantity: newQty, total: newQty * item.unitPrice };
+        return { ...item, quantity: newQty, total: Number((newQty * item.unitPrice).toFixed(2)) };
       }
       return item;
     }).filter(item => item.quantity > 0));
@@ -156,8 +157,8 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   };
 
   const calculateTotals = () => {
-    const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
-    const tax = restaurant ? (subtotal * restaurant.tax_rate) / 100 : 0;
+    const subtotal = cart.reduce((sum, item) => sum + Number(item.total), 0);
+    const tax = restaurant ? (subtotal * Number(restaurant.tax_rate)) / 100 : 0;
     const total = subtotal + tax;
     return { subtotal, tax, total };
   };
