@@ -108,7 +108,6 @@ export default function Home() {
             color="red"
           />
         </div>
-        </div>
       </section>
 
       {/* Benefits Section */}
