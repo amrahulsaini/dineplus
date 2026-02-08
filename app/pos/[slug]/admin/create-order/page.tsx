@@ -311,9 +311,16 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
     );
   }
 
-  const filteredItems = selectedCategory === 'all' 
-    ? menuItems 
-    : menuItems.filter(item => item.category_id === selectedCategory);
+  let filteredItems = [];
+  if (selectedCategory === 'all') {
+    filteredItems = menuItems;
+  } else {
+    for (let i = 0; i < menuItems.length; i++) {
+      if (menuItems[i].category_id === selectedCategory) {
+        filteredItems.push(menuItems[i]);
+      }
+    }
+  }
 
   const { subtotal, tax, total } = calculateTotals();
 

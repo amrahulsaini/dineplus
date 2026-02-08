@@ -165,15 +165,15 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
               type="text"
               placeholder="Username"
               value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+              onChange={handleUsernameChange}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
             />
             <input
               type="password"
               placeholder="Password"
               value={credentials.password}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              onChange={handlePasswordChange}
+              onKeyPress={handleKeyPress}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
             />
             <button
