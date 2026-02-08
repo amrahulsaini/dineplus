@@ -324,7 +324,8 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
 
   const { subtotal, tax, total } = calculateTotals();
 
-  return <div className="p-6 max-w-7xl mx-auto">
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
@@ -470,5 +471,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 }
