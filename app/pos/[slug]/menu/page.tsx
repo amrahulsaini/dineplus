@@ -71,10 +71,15 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   const loadMenuItems = async (restaurantId: string) => {
     try {
       const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
-      const data = await response.json();
-      setMenuItems(data);
+      if (response.ok) {
+        const data = await response.json();
+        setMenuItems(Array.isArray(data) ? data : []);
+      } else {
+        setMenuItems([]);
+      }
     } catch (error) {
       console.error('Error loading menu items:', error);
+      setMenuItems([]);
     } finally {
       setLoading(false);
     }
@@ -83,10 +88,15 @@ export default function MenuPage({ params }: { params: Promise<{ slug: string }>
   const loadCategories = async (restaurantId: string) => {
     try {
       const response = await fetch(`/api/categories?restaurantId=${restaurantId}`);
-      const data = await response.json();
-      setCategories(data);
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(Array.isArray(data) ? data : []);
+      } else {
+        setCategories([]);
+      }
     } catch (error) {
       console.error('Error loading categories:', error);
+      setCategories([]);
     }
   };
 

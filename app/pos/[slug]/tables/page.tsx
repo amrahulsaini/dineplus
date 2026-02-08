@@ -55,10 +55,15 @@ export default function TablesPage({ params }: { params: Promise<{ slug: string 
   const loadTables = async (restaurantId: string) => {
     try {
       const response = await fetch(`/api/tables?restaurantId=${restaurantId}`);
-      const data = await response.json();
-      setTables(data);
+      if (response.ok) {
+        const data = await response.json();
+        setTables(Array.isArray(data) ? data : []);
+      } else {
+        setTables([]);
+      }
     } catch (error) {
       console.error('Error loading tables:', error);
+      setTables([]);
     } finally {
       setLoading(false);
     }

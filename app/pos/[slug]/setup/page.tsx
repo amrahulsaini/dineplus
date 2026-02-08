@@ -57,25 +57,25 @@ export default function POSSetupPage({ params }: SetupPageProps) {
 
   if (!restaurant) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto"></div>
-          <p className="mt-4 text-slate-400">Loading restaurant...</p>
+          <p className="mt-4 text-gray-600">Loading restaurant...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12">
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 py-12">
+      <div className="absolute inset-0 bg-grid-orange-900/[0.02] bg-[size:50px_50px]"></div>
       <div className="max-w-6xl mx-auto px-4 relative">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Welcome to {restaurant.name}!
           </h1>
-          <p className="text-slate-400 text-lg">Let's set up your restaurant step by step</p>
+          <p className="text-gray-600 text-lg">Let's set up your restaurant step by step</p>
         </div>
 
         {/* Setup Steps */}
@@ -118,8 +118,8 @@ export default function POSSetupPage({ params }: SetupPageProps) {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl p-8 border border-slate-700">
-          <h2 className="text-2xl font-bold mb-6 text-white">Quick Actions</h2>
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-orange-200">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">Quick Actions</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Link
               href={`/pos/${slug}/dashboard`}
@@ -131,7 +131,7 @@ export default function POSSetupPage({ params }: SetupPageProps) {
             
             <a
               href="https://loopwar.dev"
-              className="flex items-center gap-3 p-4 bg-slate-700 text-slate-300 rounded-2xl hover:bg-slate-600 transition-all"
+              className="flex items-center gap-3 p-4 bg-orange-100 text-gray-700 rounded-2xl hover:bg-orange-200 transition-all"
             >
               <span className="font-semibold">Back to Main Site</span>
             </a>
@@ -139,9 +139,9 @@ export default function POSSetupPage({ params }: SetupPageProps) {
         </div>
 
         {/* Info Box */}
-        <div className="mt-8 bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700">
-          <h3 className="font-bold text-lg mb-3 text-white">💡 Getting Started Tips:</h3>
-          <ul className="space-y-2 text-slate-300">
+        <div className="mt-8 bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-orange-200">
+          <h3 className="font-bold text-lg mb-3 text-gray-900">💡 Getting Started Tips:</h3>
+          <ul className="space-y-2 text-gray-700">
             <li>✅ Start by adding at least 2-3 categories</li>
             <li>✅ Add 5-10 menu items with proper pricing</li>
             <li>✅ Configure your tables for better order management</li>
@@ -165,19 +165,19 @@ function SetupCard({ title, description, icon, isComplete, href }: SetupCardProp
   return (
     <Link
       href={href}
-      className="block bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700 hover:border-orange-500 hover:shadow-xl transition-all transform hover:scale-105"
+      className="block bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-orange-200 hover:border-orange-500 hover:shadow-xl transition-all transform hover:scale-105"
     >
       <div className="flex items-start gap-4">
-        <div className={`p-3 rounded-xl ${isComplete ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}`}>
+        <div className={`p-3 rounded-xl ${isComplete ? 'bg-green-500/20 text-green-600' : 'bg-orange-500/20 text-orange-600'}`}>
           {icon}
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="font-bold text-lg text-white">{title}</h3>
-            {isComplete && <CheckCircle className="w-6 h-6 text-green-400" />}
+            <h3 className="font-bold text-lg text-gray-900">{title}</h3>
+            {isComplete && <CheckCircle className="w-6 h-6 text-green-600" />}
           </div>
-          <p className="text-slate-400 text-sm">{description}</p>
-          <div className="mt-4 flex items-center gap-2 text-orange-400 font-semibold">
+          <p className="text-gray-600 text-sm">{description}</p>
+          <div className="mt-4 flex items-center gap-2 text-orange-600 font-semibold">
             <span>{isComplete ? 'View Details' : 'Get Started'}</span>
             <ArrowRight className="w-4 h-4" />
           </div>

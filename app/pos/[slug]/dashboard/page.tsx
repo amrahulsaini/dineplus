@@ -57,10 +57,15 @@ export default function DashboardPage({ params }: { params: Promise<{ slug: stri
         fetch(`/api/inventory?restaurantId=${restaurantId}`)
       ]);
 
-      const categories = await categoriesRes.json();
-      const menu = await menuRes.json();
-      const tables = await tablesRes.json();
-      const inventory = await inventoryRes.json();
+      const categoriesData = await categoriesRes.json();
+      const menuData = await menuRes.json();
+      const tablesData = await tablesRes.json();
+      const inventoryData = await inventoryRes.json();
+
+      const categories = Array.isArray(categoriesData) ? categoriesData : [];
+      const menu = Array.isArray(menuData) ? menuData : [];
+      const tables = Array.isArray(tablesData) ? tablesData : [];
+      const inventory = Array.isArray(inventoryData) ? inventoryData : [];
 
       const lowStock = inventory.filter((item: any) => item.current_stock <= item.min_stock_level).length;
 
@@ -72,6 +77,12 @@ export default function DashboardPage({ params }: { params: Promise<{ slug: stri
       });
     } catch (error) {
       console.error('Error loading stats:', error);
+      setStats({
+        totalCategories: 0,
+        totalMenuItems: 0,
+        totalTables: 0,
+        lowStockItems: 0
+      });
     } finally {
       setLoading(false);
     }

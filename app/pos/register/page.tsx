@@ -82,17 +82,17 @@ export default function POSRegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12">
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 py-12">
+      <div className="absolute inset-0 bg-grid-orange-900/[0.02] bg-[size:50px_50px]"></div>
       <div className="max-w-4xl mx-auto px-4 relative">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Register Your Restaurant
           </h1>
-          <p className="text-slate-400">Set up your restaurant POS system</p>
+          <p className="text-gray-600">Set up your restaurant POS system</p>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-slate-700">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-orange-200">
           {success && (
             <div className="mb-6 p-4 bg-green-500/10 border border-green-500/50 rounded-2xl text-green-400 font-semibold">
               ✅ Restaurant created successfully! Redirecting to setup...

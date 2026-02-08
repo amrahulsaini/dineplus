@@ -57,10 +57,15 @@ export default function InventoryPage({ params }: { params: Promise<{ slug: stri
   const loadInventory = async (restaurantId: string) => {
     try {
       const response = await fetch(`/api/inventory?restaurantId=${restaurantId}`);
-      const data = await response.json();
-      setInventory(data);
+      if (response.ok) {
+        const data = await response.json();
+        setInventory(Array.isArray(data) ? data : []);
+      } else {
+        setInventory([]);
+      }
     } catch (error) {
       console.error('Error loading inventory:', error);
+      setInventory([]);
     } finally {
       setLoading(false);
     }
