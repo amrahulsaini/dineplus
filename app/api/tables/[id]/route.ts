@@ -32,6 +32,20 @@ export async function PUT(
     if (status !== undefined) {
       // Allow manual status change: available, occupied, reserved
       if (['available', 'occupied', 'reserved'].includes(status)) {
+        // Check if table has active orders before setting to available
+        if (status === 'available') {
+          const [activeOrders]: any = await pool.query(
+            'SELECT COUNT(*) as count FROM orders WHERE table_id = ? AND status NOT IN ("delivered", "cancelled", "completed")',
+            [id]
+          );
+          
+          if (activeOrders[0].count > 0) {
+            return NextResponse.json({ 
+              error: 'Cannot set table to available - table has active orders' 
+            }, { status: 400 });
+          }
+        }
+        
         updates.push('status = ?');
         values.push(status);
       }

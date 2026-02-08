@@ -193,6 +193,12 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   };
 
   const handleTableSelect = (tableId: string) => {
+    const table = tables.find(t => t.id === tableId);
+    // Prevent selecting occupied tables
+    if (table && table.status === 'occupied') {
+      alert('This table is currently occupied with an active order. Please choose another table or wait until the order is completed.');
+      return;
+    }
     setSelectedTable(tableId);
     setShowTableModal(false);
   };
@@ -330,11 +336,12 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
         alert('Order created successfully!');
         router.push('/pos/' + restaurant.slug + '/admin');
       } else {
-        alert('Failed to create order');
+        const error = await response.json();
+        alert(error.error || 'Failed to create order');
       }
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Error creating order');
+      alert('Error creating order. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -542,44 +549,57 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {tables.map((table) => (
-                    <div key={table.id} className="relative">
-                      <button
-                        onClick={() => handleTableSelect(table.id)}
-                        className={`w-full p-6 rounded-xl border-3 transition-all hover:shadow-lg ${
-                          selectedTable === table.id
-                            ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-500'
-                            : getStatusColor(table.status)
-                        }`}
-                      >
-                        <div className="text-center">
-                          <div className="text-3xl font-bold mb-2">{table.table_number}</div>
-                          <div className="text-sm font-semibold capitalize mb-2">{table.status}</div>
-                          {table.capacity && (
-                            <div className="text-xs text-gray-600 mt-1">{table.capacity} seats</div>
-                          )}
+                  {tables.map((table) => {
+                    const isOccupied = table.status === 'occupied';
+                    const isDisabled = isOccupied;
+                    
+                    return (
+                      <div key={table.id} className="relative">
+                        <button
+                          onClick={() => handleTableSelect(table.id)}
+                          disabled={isDisabled}
+                          className={`w-full p-6 rounded-xl border-3 transition-all ${
+                            isDisabled 
+                              ? 'cursor-not-allowed opacity-60'
+                              : 'hover:shadow-lg cursor-pointer'
+                          } ${
+                            selectedTable === table.id
+                              ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-500'
+                              : getStatusColor(table.status)
+                          }`}
+                        >
+                          <div className="text-center">
+                            <div className="text-3xl font-bold mb-2">{table.table_number}</div>
+                            <div className="text-sm font-semibold capitalize mb-2">
+                              {table.status}
+                              {isOccupied && <div className="text-xs mt-1">(Active Order)</div>}
+                            </div>
+                            {table.capacity && (
+                              <div className="text-xs text-gray-600 mt-1">{table.capacity} seats</div>
+                            )}
+                          </div>
+                        </button>
+                        {/* Quick status change buttons - only for non-occupied tables or manual override */}
+                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                          <button
+                            onClick={(e) => handleTableStatusChange(table.id, 'available', e)}
+                            className="w-6 h-6 rounded-full bg-green-500 hover:bg-green-600 shadow-md"
+                            title="Set Available"
+                          />
+                          <button
+                            onClick={(e) => handleTableStatusChange(table.id, 'occupied', e)}
+                            className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 shadow-md"
+                            title="Set Occupied"
+                          />
+                          <button
+                            onClick={(e) => handleTableStatusChange(table.id, 'reserved', e)}
+                            className="w-6 h-6 rounded-full bg-yellow-500 hover:bg-yellow-600 shadow-md"
+                            title="Set Reserved"
+                          />
                         </div>
-                      </button>
-                      {/* Quick status change buttons */}
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
-                        <button
-                          onClick={(e) => handleTableStatusChange(table.id, 'available', e)}
-                          className="w-6 h-6 rounded-full bg-green-500 hover:bg-green-600 shadow-md"
-                          title="Set Available"
-                        />
-                        <button
-                          onClick={(e) => handleTableStatusChange(table.id, 'occupied', e)}
-                          className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 shadow-md"
-                          title="Set Occupied"
-                        />
-                        <button
-                          onClick={(e) => handleTableStatusChange(table.id, 'reserved', e)}
-                          className="w-6 h-6 rounded-full bg-yellow-500 hover:bg-yellow-600 shadow-md"
-                          title="Set Reserved"
-                        />
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

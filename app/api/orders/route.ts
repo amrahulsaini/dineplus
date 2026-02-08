@@ -45,6 +45,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid order data' }, { status: 400 });
     }
     
+    // If dine-in order, check if table is available
+    if (orderType === 'dine-in' && tableId) {
+      // Check if table has active orders
+      const [activeOrders]: any = await pool.query(
+        'SELECT COUNT(*) as count FROM orders WHERE table_id = ? AND status NOT IN ("delivered", "cancelled", "completed")',
+        [tableId]
+      );
+      
+      if (activeOrders[0].count > 0) {
+        return NextResponse.json({ 
+          error: 'This table is currently occupied with an active order. Please choose another table.' 
+        }, { status: 400 });
+      }
+      
+      // Check table status
+      const [tableStatus]: any = await pool.query(
+        'SELECT status FROM restaurant_tables WHERE id = ?',
+        [tableId]
+      );
+      
+      if (tableStatus.length > 0 && tableStatus[0].status === 'occupied') {
+        return NextResponse.json({ 
+          error: 'This table is currently occupied. Please choose another table.' 
+        }, { status: 400 });
+      }
+    }
+    
     const orderId = uuidv4();
     
     // Insert order
