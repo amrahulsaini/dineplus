@@ -204,7 +204,6 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500">
           <div className="flex items-center justify-between">
@@ -247,7 +246,6 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Link
             href={`/pos/${restaurant.slug}/admin/tables`}
@@ -295,7 +293,6 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           </Link>
         </div>
 
-        {/* Recent Orders */}
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
           

@@ -229,7 +229,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Menu Section */}
         <div className="lg:col-span-2">
-            {/* Order Type Selection */}
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <h3 className="font-bold text-lg mb-4">Order Type</h3>
               <div className="grid grid-cols-3 gap-4">
@@ -265,7 +264,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               )}
             </div>
 
-            {/* Category Filter */}
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <div className="flex gap-2 overflow-x-auto pb-2">
                 <button
@@ -294,7 +292,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
 
-            {/* Menu Items */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="font-bold text-lg mb-4">Menu Items</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -330,12 +327,10 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          {/* Cart Section */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
               <h3 className="font-bold text-lg mb-4">Order Summary</h3>
 
-              {/* Cart Items */}
               <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
                 {cart.map(item => (
                   <div key={item.menuItemId} className="border-2 border-gray-200 rounded-xl p-3">
@@ -367,7 +362,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
-                      <p className="font-bold">{restaurant.currency} {item.total.toFixed(2)}</p>
+                      <p className="font-bold">{restaurant.currency} {Number(item.total).toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -380,7 +375,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 )}
               </div>
 
-              {/* Customer Details */}
               {orderType !== 'dine-in' && (
                 <div className="mb-4 space-y-3">
                   <input
@@ -400,23 +394,21 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 </div>
               )}
 
-              {/* Totals */}
               <div className="border-t-2 border-gray-200 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold">{restaurant.currency} {subtotal.toFixed(2)}</span>
+                  <span className="font-semibold">{restaurant.currency} {Number(subtotal).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Tax ({restaurant.tax_rate || 0}%)</span>
-                  <span className="font-semibold">{restaurant.currency} {tax.toFixed(2)}</span>
+                  <span className="font-semibold">{restaurant.currency} {Number(tax).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold border-t-2 border-gray-200 pt-2">
                   <span>Total</span>
-                  <span className="text-orange-600">{restaurant.currency} {total.toFixed(2)}</span>
+                  <span className="text-orange-600">{restaurant.currency} {Number(total).toFixed(2)}</span>
                 </div>
               </div>
 
-              {/* Notes */}
               <textarea
                 placeholder="Special instructions..."
                 value={notes}
@@ -425,7 +417,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                 rows={2}
               />
 
-              {/* Place Order Button */}
               <button
                 onClick={handleCreateOrder}
                 disabled={cart.length === 0 || saving}
