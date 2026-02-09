@@ -224,7 +224,6 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
         <script>
           window.onload = function() {
             window.print();
-            setTimeout(() => window.close(), 500);
           };
         </script>
       </body>
@@ -340,10 +339,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
         <div class="footer">
           <div>Thank you for dining with us!</div>
           <div>Visit again soon</div>
-            <div style="margin-top: 5px;">Powered by LoopWar</div>
+          <div style="margin-top: 5px;">Powered by LoopWar</div>
+        </div>
+        
+        <script>
           window.onload = function() {
             window.print();
-            setTimeout(() => window.close(), 500);
           };
         </script>
       </body>
