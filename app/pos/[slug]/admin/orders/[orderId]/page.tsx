@@ -44,6 +44,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
   const [showAddItems, setShowAddItems] = useState(false);
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -93,7 +94,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
     const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
     if (response.ok) {
       const data = await response.json();
-      setMenuItems(Array.isArray(data) ? data : []);
+      // Convert base_price to number for consistent handling
+      const items = Array.isArray(data) ? data.map((item: any) => ({
+        ...item,
+        base_price: Number(item.base_price) || 0
+      })) : [];
+      setMenuItems(items);
     }
   };
 
@@ -335,36 +341,57 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
 
       {/* Add Items Modal */}
       {showAddItems && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowAddItems(false)}>
-          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItems(false); setSearchQuery(''); }}>
+          <div className="bg-white rounded-3xl w-full max-w-2xl flex flex-col max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Add Items to Order</h2>
               
-              <div className="space-y-2 mb-6">
-                {menuItems.filter(item => item.is_available).map(item => (
-                  <div key={item.id} className="flex justify-between items-center border border-gray-200 rounded-xl p-4">
+              {/* Search Bar */}
+              <input
+                type="text"
+                placeholder="Search menu items..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
+                autoFocus
+              />
+            </div>
+            
+            {/* Scrollable Menu Items */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-2">
+              {menuItems
+                .filter(item => item.is_available && 
+                  (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase())))
+                .map(item => (
+                  <div key={item.id} className="flex justify-between items-center border border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-colors">
                     <div>
                       <p className="font-semibold text-gray-900">{item.name}</p>
                       <p className="text-sm text-orange-600 font-bold">{restaurant?.currency} {item.base_price.toFixed(2)}</p>
                     </div>
                     <button
                       onClick={() => addItemToOrder(item)}
-                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-semibold"
+                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-semibold transition-colors"
                     >
                       Add +
                     </button>
                   </div>
                 ))}
-              </div>
+              {menuItems.filter(item => item.is_available && 
+                (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase()))).length === 0 && (
+                <p className="text-center text-gray-500 py-8">No items found</p>
+              )}
+            </div>
 
+            {/* Footer with Selected Items and Actions */}
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
               {selectedItems.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="font-bold mb-2">Selected Items:</h3>
-                  <div className="space-y-2">
+                <div className="mb-4">
+                  <h3 className="font-bold mb-2">Selected Items ({selectedItems.length}):</h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
                     {selectedItems.map(item => (
-                      <div key={item.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-                        <span>{item.name} × {item.quantity}</span>
-                        <span className="font-bold">{restaurant?.currency} {(item.base_price * item.quantity).toFixed(2)}</span>
+                      <div key={item.id} className="flex justify-between items-center bg-white p-3 rounded-lg">
+                        <span className="font-medium">{item.name} × {item.quantity}</span>
+                        <span className="font-bold text-orange-600">{restaurant?.currency} {(item.base_price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
@@ -373,7 +400,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => setShowAddItems(false)}
+                  onClick={() => { setShowAddItems(false); setSearchQuery(''); }}
                   className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-bold"
                 >
                   Cancel
@@ -381,9 +408,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
                 <button
                   onClick={updateOrderWithNewItems}
                   disabled={selectedItems.length === 0}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:shadow-xl font-bold disabled:opacity-50"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:shadow-xl font-bold disabled:opacity-50 transition-all"
                 >
-                  Add to Order
+                  Add to Order ({selectedItems.length})
                 </button>
               </div>
             </div>
