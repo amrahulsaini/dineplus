@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, Clock, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { Eye, Clock, CheckCircle, XCircle, Trash2, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 interface Order {
@@ -198,11 +198,11 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               </div>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-2">
                 <select
                   value={order.status}
                   onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                  className="px-3 py-2 border-2 border-gray-300 rounded-lg text-sm focus:border-orange-500 focus:outline-none"
+                  className="px-3 py-2 border-2 border-gray-300 rounded-lg text-sm focus:border-orange-500 focus:outline-none col-span-2"
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
@@ -212,16 +212,25 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                   <option value="completed">Completed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
                 <Link
                   href={`/pos/${restaurant?.slug}/admin/orders/${order.id}`}
-                  className="flex items-center justify-center gap-2 px-3 py-2 bg-orange-100 text-orange-700 rounded-lg font-semibold hover:bg-orange-200"
+                  className="flex items-center justify-center gap-1 px-2 py-2 bg-orange-100 text-orange-700 rounded-lg font-semibold hover:bg-orange-200 text-xs"
                 >
                   <Eye className="w-4 h-4" />
                   View
                 </Link>
+                <Link
+                  href={`/pos/${restaurant?.slug}/admin/orders/${order.id}`}
+                  className="flex items-center justify-center gap-1 px-2 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200 text-xs"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add
+                </Link>
                 <button
                   onClick={() => deleteOrder(order.id, order.order_number || order.id.slice(0, 8))}
-                  className="flex items-center justify-center gap-2 px-3 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200"
+                  className="flex items-center justify-center gap-1 px-2 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200 text-xs"
                   title="Delete Order"
                 >
                   <Trash2 className="w-4 h-4" />

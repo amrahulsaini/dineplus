@@ -109,14 +109,28 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
   };
 
   const updateOrderWithNewItems = async () => {
-    if (selectedItems.length === 0) return;
+    if (selectedItems.length === 0 || !order) return;
 
-    // For simplicity, we'll reload the order after adding items
-    // In a real app, you'd have a proper API endpoint to add items
-    alert('Items added to order');
-    setShowAddItems(false);
-    setSelectedItems([]);
-    if (order) await loadOrder(order.id);
+    try {
+      const response = await fetch(`/api/orders/${order.id}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: selectedItems })
+      });
+
+      if (response.ok) {
+        alert('Items added successfully!');
+        setShowAddItems(false);
+        setSelectedItems([]);
+        await loadOrder(order.id);
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Failed to add items');
+      }
+    } catch (error) {
+      console.error('Error adding items:', error);
+      alert('Error adding items to order');
+    }
   };
 
   const updateStatus = async (status: string) => {
