@@ -53,10 +53,42 @@ export default function ReportsPage({ params }: { params: Promise<{ slug: string
       const response = await fetch(`/api/orders/stats?restaurantId=${restaurantId}`);
       if (response.ok) {
         const data = await response.json();
-        setStats(data);
+        // Convert numeric values and add defaults
+        setStats({
+          totalRevenue: Number(data.totalRevenue) || 0,
+          totalOrders: Number(data.totalOrders) || 0,
+          avgOrderValue: Number(data.avgOrderValue) || 0,
+          topItems: Array.isArray(data.topItems) ? data.topItems.map((item: any) => ({
+            name: item.name || 'Unknown',
+            quantity: Number(item.quantity) || 0,
+            revenue: Number(item.revenue) || 0
+          })) : [],
+          dailyStats: Array.isArray(data.dailyStats) ? data.dailyStats.map((day: any) => ({
+            date: day.date || new Date().toISOString(),
+            orders: Number(day.orders) || 0,
+            revenue: Number(day.revenue) || 0
+          })) : []
+        });
+      } else {
+        // Set default empty stats if API fails
+        setStats({
+          totalRevenue: 0,
+          totalOrders: 0,
+          avgOrderValue: 0,
+          topItems: [],
+          dailyStats: []
+        });
       }
     } catch (error) {
       console.error('Error loading stats:', error);
+      // Set default empty stats on error
+      setStats({
+        totalRevenue: 0,
+        totalOrders: 0,
+        avgOrderValue: 0,
+        topItems: [],
+        dailyStats: []
+      });
     }
   };
 
