@@ -15,6 +15,7 @@ interface Order {
   payment_status: string;
   total: number;
   created_at: string;
+  updated_at: string;
 }
 
 export default function OrdersPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -114,8 +115,10 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     }
   };
 
-  const getElapsedTime = (createdAt: string) => {
-    const elapsed = Math.floor((currentTime - new Date(createdAt).getTime()) / 1000);
+  const getElapsedTime = (createdAt: string, status: string, updatedAt: string) => {
+    // If order is completed, show time from created to completed (updated_at)
+    const endTime = status === 'completed' ? new Date(updatedAt).getTime() : currentTime;
+    const elapsed = Math.floor((endTime - new Date(createdAt).getTime()) / 1000);
     
     if (elapsed < 60) {
       return `${elapsed}s`;
@@ -177,7 +180,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               <div className="mb-4 space-y-1 text-sm text-gray-600">
                 <p className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span className="font-semibold text-orange-600">{getElapsedTime(order.created_at)}</span>
+                  <span className="font-semibold text-orange-600">{getElapsedTime(order.created_at, order.status, order.updated_at)}</span>
                   <span className="text-gray-400">|</span>
                   <span>{new Date(order.created_at).toLocaleTimeString()}</span>
                 </p>
