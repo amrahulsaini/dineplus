@@ -379,7 +379,7 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const { subtotal, tax, total } = calculateTotals();
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
@@ -456,10 +456,10 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
         </div>
 
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
-            <h3 className="font-bold text-lg mb-4">Order Summary</h3>
+          <div className="bg-white rounded-2xl shadow-lg p-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+            <h3 className="font-bold text-lg mb-4 sticky top-0 bg-white pb-2 border-b-2 border-gray-100">Order Summary</h3>
 
-            <div className="space-y-3 mb-6 max-h-96 overflow-y-auto">
+            <div className="space-y-3 mb-4 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-100">
               {renderCartItems()}
 
               {cart.length === 0 && (

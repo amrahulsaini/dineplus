@@ -57,7 +57,13 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ restaur
         if (menuResponse.ok) {
           const menuData = await menuResponse.json();
           console.log('Menu data loaded:', menuData); // Debug log
-          const items = Array.isArray(menuData) ? menuData.filter((item: MenuItem) => item.is_active) : [];
+          // Convert base_price to number and filter active items
+          const items = Array.isArray(menuData) ? menuData
+            .filter((item: any) => item.is_active)
+            .map((item: any) => ({
+              ...item,
+              base_price: Number(item.base_price) || 0
+            })) : [];
           console.log('Filtered items:', items); // Debug log
           setMenuItems(items);
           
