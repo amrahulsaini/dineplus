@@ -79,15 +79,28 @@ export async function PUT(
     
     await pool.query(query, values);
     
-    // Update table status back to available ONLY when admin sets order to 'completed'
-    if (status && status === 'completed') {
-      // Get the table_id from the order
+    // Handle table status updates based on order status changes
+    if (status) {
+      // Get the order's current table_id and previous status
       const [orders]: any = await pool.query('SELECT table_id FROM orders WHERE id = ?', [id]);
+      
       if (orders.length > 0 && orders[0].table_id) {
-        await pool.query(
-          'UPDATE restaurant_tables SET status = "available" WHERE id = ?',
-          [orders[0].table_id]
-        );
+        const tableId = orders[0].table_id;
+        
+        // If status changed TO 'completed' → set table to 'available'
+        if (status === 'completed') {
+          await pool.query(
+            'UPDATE restaurant_tables SET status = "available" WHERE id = ?',
+            [tableId]
+          );
+        }
+        // If status changed FROM 'completed' to any active status → set table to 'occupied'
+        else if (['pending', 'confirmed', 'preparing', 'ready', 'delivered'].includes(status)) {
+          await pool.query(
+            'UPDATE restaurant_tables SET status = "occupied" WHERE id = ?',
+            [tableId]
+          );
+        }
       }
     }
     
