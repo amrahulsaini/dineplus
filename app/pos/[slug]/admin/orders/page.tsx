@@ -25,6 +25,11 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [showAddItems, setShowAddItems] = useState(false);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -42,6 +47,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
         const data = await response.json();
         setRestaurant(data);
         await loadOrders(data.id);
+        await loadMenu(data.id);
       }
       setLoading(false);
     };
@@ -73,6 +79,62 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
         total: Number(order.total) || 0
       })) : [];
       setOrders(orders);
+    }
+  };
+
+  const loadMenu = async (restaurantId: string) => {
+    const response = await fetch(`/api/menu?restaurantId=${restaurantId}`);
+    if (response.ok) {
+      const data = await response.json();
+      const items = Array.isArray(data) ? data.map((item: any) => ({
+        ...item,
+        base_price: Number(item.base_price) || 0
+      })) : [];
+      setMenuItems(items);
+    }
+  };
+
+  const openAddItemsModal = (order: Order) => {
+    setSelectedOrder(order);
+    setSelectedItems([]);
+    setSearchQuery('');
+    setShowAddItems(true);
+  };
+
+  const addItemToOrder = (item: any) => {
+    const existing = selectedItems.find(i => i.id === item.id);
+    if (existing) {
+      setSelectedItems(selectedItems.map(i => 
+        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+      ));
+    } else {
+      setSelectedItems([...selectedItems, { ...item, quantity: 1 }]);
+    }
+  };
+
+  const updateOrderWithNewItems = async () => {
+    if (selectedItems.length === 0 || !selectedOrder) return;
+
+    try {
+      const response = await fetch(`/api/orders/${selectedOrder.id}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: selectedItems })
+      });
+
+      if (response.ok) {
+        alert('Items added successfully!');
+        setShowAddItems(false);
+        setSelectedItems([]);
+        setSelectedOrder(null);
+        if (restaurant) await loadOrders(restaurant.id);
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Failed to add items');
+      }
+    } catch (error) {
+      console.error('Error adding items:', error);
+      alert('Error adding items to order');
     }
   };
 
@@ -221,13 +283,13 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                   <Eye className="w-4 h-4" />
                   View
                 </Link>
-                <Link
-                  href={`/pos/${restaurant?.slug}/admin/orders/${order.id}`}
+                <button
+                  onClick={() => openAddItemsModal(order)}
                   className="flex items-center justify-center gap-1 px-2 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200 text-xs"
                 >
                   <Plus className="w-4 h-4" />
                   Add
-                </Link>
+                </button>
                 <button
                   onClick={() => deleteOrder(order.id, order.order_number || order.id.slice(0, 8))}
                   className="flex items-center justify-center gap-1 px-2 py-2 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200 text-xs"
@@ -246,6 +308,83 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
           </div>
         )}
       </div>
+
+      {/* Add Items Modal */}
+      {showAddItems && selectedOrder && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItems(false); setSearchQuery(''); }}>
+          <div className="bg-white rounded-3xl w-full max-w-2xl flex flex-col max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Add Items to Order</h2>
+              <p className="text-sm text-gray-600 mb-4">Order #{selectedOrder.order_number || selectedOrder.id.slice(0, 8)}</p>
+              
+              <input
+                type="text"
+                placeholder="Search menu items..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
+                autoFocus
+              />
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-2">
+              {menuItems
+                .filter(item => item.is_active && 
+                  (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase())))
+                .map(item => (
+                  <div key={item.id} className="flex justify-between items-center border border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-colors">
+                    <div>
+                      <p className="font-semibold text-gray-900">{item.name}</p>
+                      <p className="text-sm text-orange-600 font-bold">{restaurant?.currency} {item.base_price.toFixed(2)}</p>
+                    </div>
+                    <button
+                      onClick={() => addItemToOrder(item)}
+                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-semibold transition-colors"
+                    >
+                      Add +
+                    </button>
+                  </div>
+                ))}
+              {menuItems.filter(item => item.is_active && 
+                (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase()))).length === 0 && (
+                <p className="text-center text-gray-500 py-8">No items found</p>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
+              {selectedItems.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="font-bold mb-2">Selected Items ({selectedItems.length}):</h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {selectedItems.map(item => (
+                      <div key={item.id} className="flex justify-between items-center bg-white p-3 rounded-lg">
+                        <span className="font-medium">{item.name} × {item.quantity}</span>
+                        <span className="font-bold text-orange-600">{restaurant?.currency} {(item.base_price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowAddItems(false); setSearchQuery(''); }}
+                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={updateOrderWithNewItems}
+                  disabled={selectedItems.length === 0}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:shadow-xl font-bold disabled:opacity-50 transition-all"
+                >
+                  Add to Order ({selectedItems.length})
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
