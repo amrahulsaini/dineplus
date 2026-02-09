@@ -116,16 +116,16 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href={`/pos/${restaurant.slug}/admin`} className="p-2 hover:bg-white/20 rounded-lg">
+              <Link href={`/pos/${restaurant?.slug}/admin`} className="p-2 hover:bg-white/20 rounded-lg">
                 <ArrowLeft className="w-6 h-6" />
               </Link>
               <div>
                 <h1 className="text-3xl font-bold">Table Management</h1>
-                <p className="text-orange-100">{restaurant.name}</p>
+                <p className="text-orange-100">{restaurant?.name}</p>
               </div>
             </div>
             <Link
-              href={`/pos/${restaurant.slug}/admin/create-order`}
+              href={`/pos/${restaurant?.slug}/admin/create-order`}
               className="flex items-center gap-2 px-6 py-3 bg-white text-orange-600 rounded-xl hover:shadow-xl font-bold"
             >
               <Plus className="w-5 h-5" />
@@ -183,7 +183,7 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No tables configured yet</p>
               <Link
-                href={`/pos/${restaurant.slug}/tables`}
+                href={`/pos/${restaurant?.slug}/tables`}
                 className="mt-4 inline-block px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600"
               >
                 Add Tables
