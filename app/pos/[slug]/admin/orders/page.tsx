@@ -23,6 +23,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     const init = async () => {
@@ -45,12 +46,20 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     };
     init();
     
+    // Update current time every second for timer
+    const timeInterval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+    
     // Auto refresh every 10 seconds
     const interval = setInterval(() => {
       if (restaurant) loadOrders(restaurant.id);
     }, 10000);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearInterval(timeInterval);
+    };
   }, [params, restaurant, router]);
 
   const loadOrders = async (restaurantId: string) => {
@@ -100,7 +109,24 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
       case 'ready': return 'bg-green-100 text-green-700';
       case 'delivered': return 'bg-gray-100 text-gray-700';
       case 'cancelled': return 'bg-red-100 text-red-700';
+      case 'completed': return 'bg-emerald-100 text-emerald-700';
       default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getElapsedTime = (createdAt: string) => {
+    const elapsed = Math.floor((currentTime - new Date(createdAt).getTime()) / 1000);
+    
+    if (elapsed < 60) {
+      return `${elapsed}s`;
+    } else if (elapsed < 3600) {
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+      return `${minutes}m ${seconds}s`;
+    } else {
+      const hours = Math.floor(elapsed / 3600);
+      const minutes = Math.floor((elapsed % 3600) / 60);
+      return `${hours}h ${minutes}m`;
     }
   };
 
@@ -117,7 +143,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
 
         {/* Status Filters */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {['all', 'pending', 'confirmed', 'preparing', 'ready', 'delivered'].map(status => (
+          {['all', 'pending', 'confirmed', 'preparing', 'ready', 'delivered', 'completed', 'cancelled'].map(status => (
             <button
               key={status}
               onClick={() => setFilter(status)}
@@ -151,7 +177,9 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               <div className="mb-4 space-y-1 text-sm text-gray-600">
                 <p className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  {new Date(order.created_at).toLocaleTimeString()}
+                  <span className="font-semibold text-orange-600">{getElapsedTime(order.created_at)}</span>
+                  <span className="text-gray-400">|</span>
+                  <span>{new Date(order.created_at).toLocaleTimeString()}</span>
                 </p>
                 <p className="font-bold text-lg text-gray-800">
                   {restaurant?.currency} {Number(order.total).toFixed(2)}
@@ -173,6 +201,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                   <option value="preparing">Preparing</option>
                   <option value="ready">Ready</option>
                   <option value="delivered">Delivered</option>
+                  <option value="completed">Completed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
                 <Link
