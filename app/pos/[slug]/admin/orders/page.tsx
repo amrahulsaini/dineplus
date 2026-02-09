@@ -226,9 +226,9 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               <div class="item">
                 <div class="item-details">
                   <div class="item-name">${item.menu_item_name}</div>
-                  <div style="font-size: 12px; color: #666;">${item.quantity} × ${restaurant?.currency} ${Number(item.unit_price).toFixed(2)}</div>
+                  <div style="font-size: 12px; color: #666;">${item.quantity} × ${restaurant?.currency || '₹'} ${Number(item.unit_price).toFixed(2)}</div>
                 </div>
-                <div class="item-price">${restaurant?.currency} ${Number(item.total).toFixed(2)}</div>
+                <div class="item-price">${restaurant?.currency || '₹'} ${Number(item.total).toFixed(2)}</div>
               </div>
             `).join('') || ''}
           </div>
@@ -236,21 +236,21 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
           <div class="totals">
             <div class="total-line">
               <span>Subtotal:</span>
-              <span>${restaurant?.currency} ${Number(fullOrder.subtotal || 0).toFixed(2)}</span>
+              <span>${restaurant?.currency || '₹'} ${Number(fullOrder.subtotal || 0).toFixed(2)}</span>
             </div>
             <div class="total-line">
               <span>Tax:</span>
-              <span>${restaurant?.currency} ${Number(fullOrder.tax || 0).toFixed(2)}</span>
+              <span>${restaurant?.currency || '₹'} ${Number(fullOrder.tax || 0).toFixed(2)}</span>
             </div>
             ${fullOrder.discount > 0 ? `
             <div class="total-line">
               <span>Discount:</span>
-              <span>- ${restaurant?.currency} ${Number(fullOrder.discount).toFixed(2)}</span>
+              <span>- ${restaurant?.currency || '₹'} ${Number(fullOrder.discount).toFixed(2)}</span>
             </div>
             ` : ''}
             <div class="total-line grand-total">
               <span>GRAND TOTAL:</span>
-              <span>${restaurant?.currency} ${Number(order.total).toFixed(2)}</span>
+              <span>${restaurant?.currency || '₹'} ${Number(order.total).toFixed(2)}</span>
             </div>
           </div>
           
@@ -262,7 +262,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
           <div class="footer">
             <div>Thank you for dining with us!</div>
             <div>Visit again soon</div>
-            <div style="margin-top: 5px;">Powered by DinePlus</div>
+            <div style="margin-top: 5px;">Powered by LoopWar</div>
           </div>
         </body>
         </html>
