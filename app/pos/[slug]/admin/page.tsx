@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Users, ShoppingCart, DollarSign, TrendingUp, Clock, CheckCircle, XCircle, Package, Plus, Eye } from 'lucide-react';
+import { Users, ShoppingCart, DollarSign, TrendingUp, Clock, CheckCircle, XCircle, Package, Plus, Eye, Printer } from 'lucide-react';
 import Link from 'next/link';
 
 interface Restaurant {
@@ -219,9 +219,29 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
           <td className="py-3 px-4 text-sm font-semibold">{restaurant?.currency} {order.total}</td>
           <td className="py-3 px-4 text-sm text-gray-600">{new Date(order.created_at).toLocaleTimeString()}</td>
           <td className="py-3 px-4">
-            <Link href={'/pos/' + restaurant?.slug + '/admin/orders/' + order.id} className="text-orange-600 hover:text-orange-800">
-              <Eye className="w-5 h-5" />
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link 
+                href={'/pos/' + restaurant?.slug + '/admin/orders/' + order.id} 
+                className="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded"
+                title="View Order"
+              >
+                <Eye className="w-5 h-5" />
+              </Link>
+              <button 
+                onClick={() => printKOT(order.id)}
+                className="text-purple-600 hover:text-purple-800 p-1.5 hover:bg-purple-50 rounded"
+                title="Print KOT"
+              >
+                <Printer className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => printBill(order.id)}
+                className="text-green-600 hover:text-green-800 p-1.5 hover:bg-green-50 rounded"
+                title="Print Bill"
+              >
+                <Printer className="w-5 h-5" />
+              </button>
+            </div>
           </td>
         </tr>
       );
@@ -238,6 +258,193 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       case 'delivered': return 'bg-gray-100 text-gray-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const printKOT = async (orderId: string) => {
+    try {
+      const response = await fetch('/api/orders/' + orderId);
+      if (!response.ok) throw new Error('Failed to fetch order');
+      
+      const data = await response.json();
+      const order = data.order;
+      const items = data.items;
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return;
+
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>KOT - ${order.id}</title>
+          <style>
+            body { font-family: 'Courier New', monospace; padding: 20px; max-width: 300px; margin: 0 auto; }
+            h1 { font-size: 18px; text-align: center; margin: 10px 0; border-bottom: 2px dashed #000; padding-bottom: 10px; }
+            .info { margin: 15px 0; font-size: 12px; }
+            .info div { margin: 5px 0; }
+            .items { margin: 20px 0; }
+            .item { margin: 10px 0; padding: 10px 0; border-bottom: 1px dashed #ccc; }
+            .item-name { font-weight: bold; font-size: 14px; }
+            .item-qty { font-size: 12px; margin-top: 5px; }
+            .footer { margin-top: 30px; text-align: center; font-size: 10px; border-top: 2px dashed #000; padding-top: 10px; }
+            @media print {
+              body { padding: 10px; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>KITCHEN ORDER TICKET</h1>
+          
+          <div class="info">
+            <div><strong>Order ID:</strong> #${order.id.slice(0, 8)}</div>
+            <div><strong>Table:</strong> ${order.table_number || 'N/A'}</div>
+            <div><strong>Type:</strong> ${order.order_type}</div>
+            <div><strong>Time:</strong> ${new Date(order.created_at).toLocaleString()}</div>
+          </div>
+
+          <div class="items">
+            ${items.map((item: any) => `
+              <div class="item">
+                <div class="item-name">${item.item_name}</div>
+                <div class="item-qty">Quantity: ${item.quantity}</div>
+                ${item.special_instructions ? `<div style="font-size: 11px; margin-top: 5px; font-style: italic;">Note: ${item.special_instructions}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="footer">
+            <div>Powered by LoopWar</div>
+          </div>
+
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    } catch (error) {
+      console.error('Print error:', error);
+      alert('Failed to print KOT');
+    }
+  };
+
+  const printBill = async (orderId: string) => {
+    try {
+      const response = await fetch('/api/orders/' + orderId);
+      if (!response.ok) throw new Error('Failed to fetch order');
+      
+      const data = await response.json();
+      const order = data.order;
+      const items = data.items;
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return;
+
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Bill - ${order.id}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
+            h1 { text-align: center; margin: 20px 0; font-size: 24px; }
+            .restaurant-info { text-align: center; margin-bottom: 20px; font-size: 12px; }
+            .order-info { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+            .order-info div { margin: 5px 0; font-size: 13px; }
+            .items { margin: 20px 0; }
+            .items table { width: 100%; border-collapse: collapse; }
+            .items th { text-align: left; padding: 10px 5px; border-bottom: 2px solid #000; font-size: 12px; }
+            .items td { padding: 8px 5px; border-bottom: 1px solid #ddd; font-size: 12px; }
+            .totals { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+            .totals div { display: flex; justify-content: space-between; margin: 8px 0; font-size: 13px; }
+            .totals .total { font-size: 16px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+            .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #666; }
+            .print-actions { text-align: center; margin: 20px 0; }
+            .print-actions button { margin: 0 10px; padding: 10px 20px; font-size: 14px; cursor: pointer; border-radius: 5px; border: none; }
+            .print-btn { background: #f97316; color: white; }
+            .download-btn { background: #3b82f6; color: white; }
+            @media print {
+              .print-actions { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="restaurant-info">
+            <h1>${restaurant?.name || 'Restaurant'}</h1>
+            <div>${restaurant?.address || ''}</div>
+            <div>${restaurant?.phone || ''}</div>
+          </div>
+
+          <h1>BILL</h1>
+
+          <div class="order-info">
+            <div><strong>Order ID:</strong> #${order.id.slice(0, 8)}</div>
+            <div><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</div>
+            <div><strong>Customer:</strong> ${order.customer_name || 'Walk-in'}</div>
+            <div><strong>Table:</strong> ${order.table_number || 'N/A'}</div>
+            <div><strong>Type:</strong> ${order.order_type}</div>
+          </div>
+
+          <div class="items">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th style="text-align: center;">Qty</th>
+                  <th style="text-align: right;">Price</th>
+                  <th style="text-align: right;">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map((item: any) => `
+                  <tr>
+                    <td>${item.item_name}</td>
+                    <td style="text-align: center;">${item.quantity}</td>
+                    <td style="text-align: right;">${restaurant?.currency || '₹'} ${Number(item.unit_price).toFixed(2)}</td>
+                    <td style="text-align: right;">${restaurant?.currency || '₹'} ${Number(item.total).toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="totals">
+            <div>
+              <span>Subtotal:</span>
+              <span>${restaurant?.currency || '₹'} ${Number(order.subtotal).toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Tax (${Number(order.tax).toFixed(2)}):</span>
+              <span>${restaurant?.currency || '₹'} ${(Number(order.total) - Number(order.subtotal)).toFixed(2)}</span>
+            </div>
+            <div class="total">
+              <span>Total:</span>
+              <span>${restaurant?.currency || '₹'} ${Number(order.total).toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div class="print-actions">
+            <button class="print-btn" onclick="window.print()">Print</button>
+            <button class="download-btn" onclick="window.print()">Download PDF</button>
+          </div>
+
+          <div class="footer">
+            <div>Thank you for your order!</div>
+            <div style="margin-top: 10px;">Powered by LoopWar</div>
+          </div>
+
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    } catch (error) {
+      console.error('Print error:', error);
+      alert('Failed to print bill');
     }
   };
 
