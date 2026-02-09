@@ -30,6 +30,8 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     const init = async () => {
@@ -92,12 +94,19 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
       })) : [];
       setMenuItems(items);
     }
+    
+    const catResponse = await fetch(`/api/categories?restaurantId=${restaurantId}`);
+    if (catResponse.ok) {
+      const catData = await catResponse.json();
+      setCategories(Array.isArray(catData) ? catData : []);
+    }
   };
 
   const openAddItemsModal = (order: Order) => {
     setSelectedOrder(order);
     setSelectedItems([]);
     setSearchQuery('');
+    setSelectedCategory('all');
     setShowAddItems(true);
   };
 
@@ -311,41 +320,67 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
 
       {/* Add Items Modal */}
       {showAddItems && selectedOrder && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItems(false); setSearchQuery(''); }}>
-          <div className="bg-white rounded-3xl w-full max-w-2xl flex flex-col max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItems(false); setSearchQuery(''); setSelectedCategory('all'); }}>
+          <div className="bg-white rounded-3xl w-full max-w-4xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Add Items to Order</h2>
               <p className="text-sm text-gray-600 mb-4">Order #{selectedOrder.order_number || selectedOrder.id.slice(0, 8)}</p>
               
-              <input
-                type="text"
-                placeholder="Search menu items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
-                autoFocus
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  placeholder="Search menu items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
+                  autoFocus
+                />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none"
+                >
+                  <option value="all">All Categories</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-6 space-y-2">
-              {menuItems
-                .filter(item => item.is_active && 
-                  (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase())))
-                .map(item => (
-                  <div key={item.id} className="flex justify-between items-center border border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-colors">
-                    <div>
-                      <p className="font-semibold text-gray-900">{item.name}</p>
-                      <p className="text-sm text-orange-600 font-bold">{restaurant?.currency} {item.base_price.toFixed(2)}</p>
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {menuItems
+                  .filter(item => item.is_active && 
+                    (selectedCategory === 'all' || item.category_id === selectedCategory) &&
+                    (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase())))
+                  .map(item => (
+                    <div key={item.id} className="border-2 border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-colors flex flex-col">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`w-3 h-3 rounded-full ${item.is_veg ? 'bg-green-500' : 'bg-red-500'}`} title={item.is_veg ? 'Vegetarian' : 'Non-Vegetarian'}></span>
+                            <p className="font-semibold text-gray-900">{item.name}</p>
+                          </div>
+                          {item.description && (
+                            <p className="text-xs text-gray-500 line-clamp-2">{item.description}</p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center mt-auto pt-2">
+                        <p className="text-sm text-orange-600 font-bold">{restaurant?.currency} {item.base_price.toFixed(2)}</p>
+                        <button
+                          onClick={() => addItemToOrder(item)}
+                          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-semibold transition-colors text-sm"
+                        >
+                          Add +
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => addItemToOrder(item)}
-                      className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-semibold transition-colors"
-                    >
-                      Add +
-                    </button>
-                  </div>
-                ))}
+                  ))}
+              </div>
               {menuItems.filter(item => item.is_active && 
+                (selectedCategory === 'all' || item.category_id === selectedCategory) &&
                 (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase()))).length === 0 && (
                 <p className="text-center text-gray-500 py-8">No items found</p>
               )}
@@ -368,7 +403,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => { setShowAddItems(false); setSearchQuery(''); }}
+                  onClick={() => { setShowAddItems(false); setSearchQuery(''); setSelectedCategory('all'); }}
                   className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-bold"
                 >
                   Cancel
