@@ -268,9 +268,8 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       const response = await fetch('/api/orders/' + orderId);
       if (!response.ok) throw new Error('Failed to fetch order');
       
-      const data = await response.json();
-      const order = data.order;
-      const items = data.items;
+      const order = await response.json();
+      const items = order.items || [];
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) return;
@@ -337,9 +336,8 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
       const response = await fetch('/api/orders/' + orderId);
       if (!response.ok) throw new Error('Failed to fetch order');
       
-      const data = await response.json();
-      const order = data.order;
-      const items = data.items;
+      const order = await response.json();
+      const items = order.items || [];
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) return;
