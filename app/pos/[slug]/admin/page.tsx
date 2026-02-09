@@ -11,6 +11,8 @@ interface Restaurant {
   slug: string;
   currency: string;
   tax_rate: number;
+  address?: string;
+  phone?: string;
 }
 
 interface Order {
