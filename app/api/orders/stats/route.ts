@@ -10,38 +10,51 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Restaurant ID required' }, { status: 400 });
     }
     
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    // Get today's stats
-    const [todayStats]: any = await pool.query(
+    // Get total revenue and orders
+    const [totalStats]: any = await pool.query(
       `SELECT 
-        COUNT(*) as todayOrders,
-        COALESCE(SUM(total), 0) as todayRevenue
+        COUNT(*) as totalOrders,
+        COALESCE(SUM(total), 0) as totalRevenue,
+        COALESCE(AVG(total), 0) as avgOrderValue
        FROM orders 
-       WHERE restaurant_id = ? AND DATE(created_at) = CURDATE()`,
+       WHERE restaurant_id = ?`,
       [restaurantId]
     );
     
-    const [pendingOrders]: any = await pool.query(
-      `SELECT COUNT(*) as count 
-       FROM orders 
-       WHERE restaurant_id = ? AND status IN ('pending', 'confirmed', 'preparing')`,
+    // Get top selling items
+    const [topItems]: any = await pool.query(
+      `SELECT 
+        oi.menu_item_name as name,
+        SUM(oi.quantity) as quantity,
+        SUM(oi.total) as revenue
+       FROM order_items oi
+       JOIN orders o ON oi.order_id = o.id
+       WHERE o.restaurant_id = ?
+       GROUP BY oi.menu_item_name
+       ORDER BY quantity DESC
+       LIMIT 10`,
       [restaurantId]
     );
     
-    const [completedOrders]: any = await pool.query(
-      `SELECT COUNT(*) as count 
+    // Get daily stats for last 7 days
+    const [dailyStats]: any = await pool.query(
+      `SELECT 
+        DATE(created_at) as date,
+        COUNT(*) as orders,
+        COALESCE(SUM(total), 0) as revenue
        FROM orders 
-       WHERE restaurant_id = ? AND DATE(created_at) = CURDATE() AND status IN ('delivered', 'ready')`,
+       WHERE restaurant_id = ? AND created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+       GROUP BY DATE(created_at)
+       ORDER BY date DESC`,
       [restaurantId]
     );
     
     return NextResponse.json({
-      todayOrders: todayStats[0].todayOrders || 0,
-      todayRevenue: todayStats[0].todayRevenue || 0,
-      pendingOrders: pendingOrders[0].count || 0,
-      completedOrders: completedOrders[0].count || 0
+      totalRevenue: Number(totalStats[0].totalRevenue) || 0,
+      totalOrders: Number(totalStats[0].totalOrders) || 0,
+      avgOrderValue: Number(totalStats[0].avgOrderValue) || 0,
+      topItems: topItems || [],
+      dailyStats: dailyStats || []
     });
   } catch (error) {
     console.error('Database error:', error);

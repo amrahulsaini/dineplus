@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Clock, Plus } from 'lucide-react';
+import { ArrowLeft, Clock, Plus, Printer } from 'lucide-react';
 import Link from 'next/link';
 
 interface OrderItem {
@@ -165,6 +165,198 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
     await loadOrder(order.id);
   };
 
+  const printKOT = () => {
+    if (!order || !restaurant) return;
+    
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    
+    const kotContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>KOT - ${order.order_number}</title>
+        <style>
+          @media print {
+            body { margin: 0; padding: 20px; font-family: monospace; }
+          }
+          body { font-family: monospace; max-width: 300px; margin: 0 auto; }
+          .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px; }
+          .title { font-size: 20px; font-weight: bold; }
+          .info { margin: 5px 0; }
+          .items { border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 10px 0; margin: 10px 0; }
+          .item { margin: 8px 0; }
+          .item-name { font-weight: bold; font-size: 14px; }
+          .item-qty { margin-left: 20px; }
+          .footer { text-align: center; margin-top: 10px; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="title">*** KITCHEN ORDER TICKET ***</div>
+          <div class="info">KOT #: ${order.order_number || order.id.slice(0, 8)}</div>
+          <div class="info">Date: ${new Date(order.created_at).toLocaleString()}</div>
+        </div>
+        
+        <div class="info">
+          <strong>Table: ${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</strong>
+        </div>
+        <div class="info">Type: ${order.order_type.toUpperCase()}</div>
+        ${order.customer_name ? `<div class="info">Customer: ${order.customer_name}</div>` : ''}
+        
+        <div class="items">
+          ${order.items.map(item => `
+            <div class="item">
+              <div class="item-name">${item.menu_item_name}</div>
+              <div class="item-qty">Qty: ${item.quantity}</div>
+              ${item.special_instructions ? `<div class="item-qty" style="font-style: italic;">Note: ${item.special_instructions}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+        
+        ${order.notes ? `<div class="info"><strong>Order Notes:</strong><br/>${order.notes}</div>` : ''}
+        
+        <div class="footer">
+          <div>--- Prepare with care ---</div>
+          <div>Powered by DinePlus</div>
+        </div>
+        
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(() => window.close(), 500);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(kotContent);
+    printWindow.document.close();
+  };
+
+  const printBill = () => {
+    if (!order || !restaurant) return;
+    
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    
+    const billContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Bill - ${order.order_number}</title>
+        <style>
+          @media print {
+            body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+          }
+          body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; }
+          .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; }
+          .restaurant-name { font-size: 24px; font-weight: bold; }
+          .bill-title { font-size: 18px; margin-top: 10px; }
+          .info { margin: 5px 0; display: flex; justify-content: space-between; }
+          .items { border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 10px 0; margin: 15px 0; }
+          .item { display: flex; justify-content: space-between; margin: 8px 0; }
+          .item-details { flex: 1; }
+          .item-name { font-weight: bold; }
+          .item-price { text-align: right; min-width: 80px; }
+          .totals { border-top: 2px solid #000; padding-top: 10px; }
+          .total-line { display: flex; justify-content: space-between; margin: 5px 0; }
+          .grand-total { font-size: 18px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+          .footer { text-align: center; margin-top: 20px; font-size: 12px; border-top: 1px dashed #000; padding-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="restaurant-name">${restaurant.name}</div>
+          <div>${restaurant.address || ''}</div>
+          <div>${restaurant.phone || ''}</div>
+          <div class="bill-title">TAX INVOICE</div>
+        </div>
+        
+        <div class="info">
+          <span>Bill No:</span>
+          <span><strong>${order.order_number || order.id.slice(0, 8)}</strong></span>
+        </div>
+        <div class="info">
+          <span>Date:</span>
+          <span>${new Date(order.created_at).toLocaleString()}</span>
+        </div>
+        <div class="info">
+          <span>Table:</span>
+          <span>${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</span>
+        </div>
+        ${order.customer_name ? `
+        <div class="info">
+          <span>Customer:</span>
+          <span>${order.customer_name}</span>
+        </div>
+        ` : ''}
+        ${order.customer_phone ? `
+        <div class="info">
+          <span>Phone:</span>
+          <span>${order.customer_phone}</span>
+        </div>
+        ` : ''}
+        
+        <div class="items">
+          ${order.items.map(item => `
+            <div class="item">
+              <div class="item-details">
+                <div class="item-name">${item.menu_item_name}</div>
+                <div style="font-size: 12px; color: #666;">${item.quantity} × ${restaurant.currency} ${item.unit_price.toFixed(2)}</div>
+              </div>
+              <div class="item-price">${restaurant.currency} ${item.total.toFixed(2)}</div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="totals">
+          <div class="total-line">
+            <span>Subtotal:</span>
+            <span>${restaurant.currency} ${order.subtotal.toFixed(2)}</span>
+          </div>
+          <div class="total-line">
+            <span>Tax:</span>
+            <span>${restaurant.currency} ${order.tax.toFixed(2)}</span>
+          </div>
+          ${order.discount > 0 ? `
+          <div class="total-line">
+            <span>Discount:</span>
+            <span>- ${restaurant.currency} ${order.discount.toFixed(2)}</span>
+          </div>
+          ` : ''}
+          <div class="total-line grand-total">
+            <span>GRAND TOTAL:</span>
+            <span>${restaurant.currency} ${order.total.toFixed(2)}</span>
+          </div>
+        </div>
+        
+        <div style="margin-top: 15px; text-align: center;">
+          <div>Payment Method: <strong>${order.payment_method.toUpperCase()}</strong></div>
+          <div>Payment Status: <strong>${order.payment_status.toUpperCase()}</strong></div>
+        </div>
+        
+        <div class="footer">
+          <div>Thank you for dining with us!</div>
+          <div>Visit again soon</div>
+          <div style="margin-top: 5px;">Powered by DinePlus</div>
+        </div>
+        
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(() => window.close(), 500);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(billContent);
+    printWindow.document.close();
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-700';
@@ -185,13 +377,31 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
       {/* Header */}
       <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-4">
-            <Link href={`/pos/${restaurant?.slug}/admin/orders`} className="p-2 hover:bg-white/20 rounded-lg">
-              <ArrowLeft className="w-6 h-6" />
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold">Order #{order.order_number || order.id.slice(0, 8)}</h1>
-              <p className="text-orange-100">{new Date(order.created_at).toLocaleString()}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href={`/pos/${restaurant?.slug}/admin/orders`} className="p-2 hover:bg-white/20 rounded-lg">
+                <ArrowLeft className="w-6 h-6" />
+              </Link>
+              <div>
+                <h1 className="text-3xl font-bold">Order #{order.order_number || order.id.slice(0, 8)}</h1>
+                <p className="text-orange-100">{new Date(order.created_at).toLocaleString()}</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={printKOT}
+                className="flex items-center gap-2 px-4 py-2 bg-white text-orange-600 rounded-lg hover:bg-orange-50 font-semibold transition-colors"
+              >
+                <Printer className="w-4 h-4" />
+                Print KOT
+              </button>
+              <button
+                onClick={printBill}
+                className="flex items-center gap-2 px-4 py-2 bg-white text-orange-600 rounded-lg hover:bg-orange-50 font-semibold transition-colors"
+              >
+                <Printer className="w-4 h-4" />
+                Print Bill
+              </button>
             </div>
           </div>
         </div>
