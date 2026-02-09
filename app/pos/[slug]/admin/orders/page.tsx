@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, Clock, CheckCircle, XCircle, Trash2, Plus } from 'lucide-react';
+import { Eye, Clock, CheckCircle, XCircle, Trash2, Plus, Printer, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 interface Order {
@@ -31,6 +31,8 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -145,6 +147,135 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     }
   };
 
+  const printBill = async (order: Order) => {
+    try {
+      // Fetch full order details with items
+      const response = await fetch(`/api/orders/${order.id}`);
+      if (!response.ok) return;
+      
+      const fullOrder = await response.json();
+      
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return;
+      
+      const billContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Bill - ${order.order_number}</title>
+          <style>
+            @media print {
+              body { margin: 0; padding: 20px; }
+              .no-print { display: none; }
+            }
+            @page { size: A4; margin: 0; }
+            body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; }
+            .restaurant-name { font-size: 24px; font-weight: bold; }
+            .bill-title { font-size: 18px; margin-top: 10px; }
+            .info { margin: 5px 0; display: flex; justify-content: space-between; }
+            .items { border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 10px 0; margin: 15px 0; }
+            .item { display: flex; justify-content: space-between; margin: 8px 0; }
+            .item-details { flex: 1; }
+            .item-name { font-weight: bold; }
+            .item-price { text-align: right; min-width: 80px; }
+            .totals { border-top: 2px solid #000; padding-top: 10px; }
+            .total-line { display: flex; justify-content: space-between; margin: 5px 0; }
+            .grand-total { font-size: 18px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+            .footer { text-align: center; margin-top: 20px; font-size: 12px; border-top: 1px dashed #000; padding-top: 10px; }
+            .no-print { text-align: center; margin: 20px 0; }
+            .no-print button { padding: 10px 20px; margin: 0 5px; font-size: 16px; cursor: pointer; border-radius: 5px; border: none; }
+            .print-btn { background: #f97316; color: white; }
+            .download-btn { background: #3b82f6; color: white; }
+          </style>
+        </head>
+        <body>
+          <div class="no-print">
+            <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+            <button class="download-btn" onclick="window.print()">📥 Download PDF</button>
+          </div>
+          
+          <div class="header">
+            <div class="restaurant-name">${restaurant?.name || 'Restaurant'}</div>
+            <div>${restaurant?.address || ''}</div>
+            <div>${restaurant?.phone || ''}</div>
+            <div class="bill-title">TAX INVOICE</div>
+          </div>
+          
+          <div class="info">
+            <span>Bill No:</span>
+            <span><strong>${order.order_number || order.id.slice(0, 8)}</strong></span>
+          </div>
+          <div class="info">
+            <span>Date:</span>
+            <span>${new Date(order.created_at).toLocaleString()}</span>
+          </div>
+          <div class="info">
+            <span>Table:</span>
+            <span>${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</span>
+          </div>
+          ${fullOrder.customer_name ? `
+          <div class="info">
+            <span>Customer:</span>
+            <span>${fullOrder.customer_name}</span>
+          </div>
+          ` : ''}
+          
+          <div class="items">
+            ${fullOrder.items?.map((item: any) => `
+              <div class="item">
+                <div class="item-details">
+                  <div class="item-name">${item.menu_item_name}</div>
+                  <div style="font-size: 12px; color: #666;">${item.quantity} × ${restaurant?.currency} ${Number(item.unit_price).toFixed(2)}</div>
+                </div>
+                <div class="item-price">${restaurant?.currency} ${Number(item.total).toFixed(2)}</div>
+              </div>
+            `).join('') || ''}
+          </div>
+          
+          <div class="totals">
+            <div class="total-line">
+              <span>Subtotal:</span>
+              <span>${restaurant?.currency} ${Number(fullOrder.subtotal || 0).toFixed(2)}</span>
+            </div>
+            <div class="total-line">
+              <span>Tax:</span>
+              <span>${restaurant?.currency} ${Number(fullOrder.tax || 0).toFixed(2)}</span>
+            </div>
+            ${fullOrder.discount > 0 ? `
+            <div class="total-line">
+              <span>Discount:</span>
+              <span>- ${restaurant?.currency} ${Number(fullOrder.discount).toFixed(2)}</span>
+            </div>
+            ` : ''}
+            <div class="total-line grand-total">
+              <span>GRAND TOTAL:</span>
+              <span>${restaurant?.currency} ${Number(order.total).toFixed(2)}</span>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px; text-align: center;">
+            <div>Payment: <strong>${fullOrder.payment_method?.toUpperCase() || 'CASH'}</strong></div>
+            <div>Status: <strong>${fullOrder.payment_status?.toUpperCase() || 'PENDING'}</strong></div>
+          </div>
+          
+          <div class="footer">
+            <div>Thank you for dining with us!</div>
+            <div>Visit again soon</div>
+            <div style="margin-top: 5px;">Powered by DinePlus</div>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      printWindow.document.write(billContent);
+      printWindow.document.close();
+    } catch (error) {
+      console.error('Error printing bill:', error);
+      alert('Failed to print bill');
+    }
+  };
+
   const updateOrderStatus = async (orderId: string, status: string) => {
     await fetch(`/api/orders/${orderId}`, {
       method: 'PUT',
@@ -207,7 +338,25 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     }
   };
 
-  const filteredOrders = filter === 'all' ? orders : orders.filter(o => o.status === filter);
+  const filteredOrders = orders.filter(order => {
+    // Status filter
+    if (filter !== 'all' && order.status !== filter) return false;
+    
+    // Date filters
+    if (startDate) {
+      const orderDate = new Date(order.created_at).setHours(0, 0, 0, 0);
+      const filterStart = new Date(startDate).setHours(0, 0, 0, 0);
+      if (orderDate < filterStart) return false;
+    }
+    
+    if (endDate) {
+      const orderDate = new Date(order.created_at).setHours(0, 0, 0, 0);
+      const filterEnd = new Date(endDate).setHours(0, 0, 0, 0);
+      if (orderDate > filterEnd) return false;
+    }
+    
+    return true;
+  });
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -215,7 +364,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Orders</h1>
 
         {/* Status Filters */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
           {['all', 'pending', 'confirmed', 'preparing', 'ready', 'delivered', 'completed', 'cancelled'].map(status => (
             <button
               key={status}
@@ -229,6 +378,38 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
               {status}
             </button>
           ))}
+        </div>
+        
+        {/* Date Filters */}
+        <div className="flex flex-wrap items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+          <Calendar className="w-5 h-5 text-gray-600" />
+          <span className="text-sm font-semibold text-gray-700">Filter by Date:</span>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none"
+            placeholder="Start Date"
+          />
+          <span className="text-gray-600">to</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none"
+            placeholder="End Date"
+          />
+          {(startDate || endDate) && (
+            <button
+              onClick={() => { setStartDate(''); setEndDate(''); }}
+              className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-semibold text-sm"
+            >
+              Clear Dates
+            </button>
+          )}
+          <div className="ml-auto text-sm text-gray-600">
+            Showing {filteredOrders.length} order(s)
+          </div>
         </div>
 
         {/* Orders Grid */}
@@ -278,7 +459,7 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 <Link
                   href={`/pos/${restaurant?.slug}/admin/orders/${order.id}`}
                   className="flex items-center justify-center gap-1 px-2 py-2 bg-orange-100 text-orange-700 rounded-lg font-semibold hover:bg-orange-200 text-xs"
@@ -292,6 +473,14 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
                 >
                   <Plus className="w-4 h-4" />
                   Add
+                </button>
+                <button
+                  onClick={() => printBill(order)}
+                  className="flex items-center justify-center gap-1 px-2 py-2 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 text-xs"
+                  title="Print Bill"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print
                 </button>
                 <button
                   onClick={() => deleteOrder(order.id, order.order_number || order.id.slice(0, 8))}
