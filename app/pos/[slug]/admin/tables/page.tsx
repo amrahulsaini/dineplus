@@ -106,14 +106,6 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
     }
   };
 
-  if (loading || !restaurant) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
-
   const availableTables = tables.filter(t => t.status === 'available').length;
   const occupiedTables = tables.filter(t => t.status === 'occupied').length;
 
