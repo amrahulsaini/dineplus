@@ -209,10 +209,6 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
 
   const filteredOrders = filter === 'all' ? orders : orders.filter(o => o.status === filter);
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div></div>;
-  }
-
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="bg-white rounded-2xl shadow-lg p-6">
