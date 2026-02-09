@@ -22,7 +22,6 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
   const router = useRouter();
   const [restaurant, setRestaurant] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [showAddItems, setShowAddItems] = useState(false);
@@ -51,7 +50,6 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
         await loadOrders(data.id);
         await loadMenu(data.id);
       }
-      setLoading(false);
     };
     init();
     

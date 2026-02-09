@@ -40,7 +40,6 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
   const router = useRouter();
   const [restaurant, setRestaurant] = useState<any>(null);
   const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
   const [showAddItems, setShowAddItems] = useState(false);
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
@@ -66,7 +65,6 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
         await loadOrder(resolvedParams.orderId);
         await loadMenu(data.id);
       }
-      setLoading(false);
     };
     init();
   }, [params, router]);
@@ -180,13 +178,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
     }
   };
 
-  if (loading || !order) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
+  if (!order) return <div className="min-h-screen bg-gray-50 p-8"><p className="text-center text-gray-600">Loading...</p></div>;
 
   return (
     <div className="min-h-screen bg-gray-50">

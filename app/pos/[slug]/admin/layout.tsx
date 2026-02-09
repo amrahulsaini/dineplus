@@ -13,7 +13,9 @@ import {
   Settings,
   LogOut,
   Menu as MenuIcon,
-  X
+  X,
+  BarChart3,
+  List
 } from 'lucide-react';
 
 export default function AdminLayout({ 
@@ -28,7 +30,6 @@ export default function AdminLayout({
   const [slug, setSlug] = useState<string>('');
   const [restaurantName, setRestaurantName] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const init = async () => {
@@ -38,7 +39,6 @@ export default function AdminLayout({
       // Check authentication
       const storedAuth = sessionStorage.getItem(`admin_auth_${resolvedParams.slug}`);
       if (!storedAuth && !pathname?.includes('/admin/login')) {
-        setLoading(false);
         return;
       }
 
@@ -52,8 +52,6 @@ export default function AdminLayout({
       } catch (error) {
         console.error('Error loading restaurant:', error);
       }
-      
-      setLoading(false);
     };
     
     init();
@@ -69,8 +67,9 @@ export default function AdminLayout({
     { icon: ShoppingCart, label: 'Create Order', href: `/pos/${slug}/admin/create-order` },
     { icon: FileText, label: 'Orders', href: `/pos/${slug}/admin/orders` },
     { icon: Utensils, label: 'Menu Items', href: `/pos/${slug}/admin/menu` },
+    { icon: List, label: 'Categories', href: `/pos/${slug}/admin/categories` },
     { icon: Table2, label: 'Tables', href: `/pos/${slug}/admin/tables` },
-    { icon: Package, label: 'Inventory', href: `/pos/${slug}/admin/inventory` },
+    { icon: BarChart3, label: 'Reports', href: `/pos/${slug}/admin/reports` },
     { icon: Settings, label: 'Settings', href: `/pos/${slug}/admin/settings` },
   ];
 
