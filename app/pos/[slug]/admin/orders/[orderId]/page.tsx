@@ -360,7 +360,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
             {/* Scrollable Menu Items */}
             <div className="flex-1 overflow-y-auto p-6 space-y-2">
               {menuItems
-                .filter(item => item.is_available && 
+                .filter(item => item.is_active && 
                   (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase())))
                 .map(item => (
                   <div key={item.id} className="flex justify-between items-center border border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-colors">
@@ -376,7 +376,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
                     </button>
                   </div>
                 ))}
-              {menuItems.filter(item => item.is_available && 
+              {menuItems.filter(item => item.is_active && 
                 (searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase()))).length === 0 && (
                 <p className="text-center text-gray-500 py-8">No items found</p>
               )}
