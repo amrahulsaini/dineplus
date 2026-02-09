@@ -280,41 +280,47 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
         <head>
           <title>KOT - ${order.id}</title>
           <style>
-            body { font-family: 'Courier New', monospace; padding: 20px; max-width: 300px; margin: 0 auto; }
-            h1 { font-size: 18px; text-align: center; margin: 10px 0; border-bottom: 2px dashed #000; padding-bottom: 10px; }
-            .info { margin: 15px 0; font-size: 12px; }
-            .info div { margin: 5px 0; }
-            .items { margin: 20px 0; }
-            .item { margin: 10px 0; padding: 10px 0; border-bottom: 1px dashed #ccc; }
-            .item-name { font-weight: bold; font-size: 14px; }
-            .item-qty { font-size: 12px; margin-top: 5px; }
-            .footer { margin-top: 30px; text-align: center; font-size: 10px; border-top: 2px dashed #000; padding-top: 10px; }
             @media print {
-              body { padding: 10px; }
+              body { margin: 0; padding: 20px; font-family: monospace; }
             }
+            body { font-family: monospace; max-width: 300px; margin: 0 auto; }
+            .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px; }
+            .title { font-size: 20px; font-weight: bold; }
+            .info { margin: 5px 0; }
+            .items { border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 10px 0; margin: 10px 0; }
+            .item { margin: 8px 0; }
+            .item-name { font-weight: bold; font-size: 14px; }
+            .item-qty { margin-left: 20px; }
+            .footer { text-align: center; margin-top: 10px; font-size: 12px; }
           </style>
         </head>
         <body>
-          <h1>KITCHEN ORDER TICKET</h1>
+          <div class="header">
+            <div class="title">*** KITCHEN ORDER TICKET ***</div>
+            <div class="info">KOT #: ${order.order_number || order.id.slice(0, 8)}</div>
+            <div class="info">Date: ${new Date(order.created_at).toLocaleString()}</div>
+          </div>
           
           <div class="info">
-            <div><strong>Order ID:</strong> #${order.id.slice(0, 8)}</div>
-            <div><strong>Table:</strong> ${order.table_number || 'N/A'}</div>
-            <div><strong>Type:</strong> ${order.order_type}</div>
-            <div><strong>Time:</strong> ${new Date(order.created_at).toLocaleString()}</div>
+            <strong>Table: ${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</strong>
           </div>
-
+          <div class="info">Type: ${order.order_type.toUpperCase()}</div>
+          ${order.customer_name ? `<div class="info">Customer: ${order.customer_name}</div>` : ''}
+          
           <div class="items">
             ${items.map((item: any) => `
               <div class="item">
-                <div class="item-name">${item.item_name}</div>
-                <div class="item-qty">Quantity: ${item.quantity}</div>
-                ${item.special_instructions ? `<div style="font-size: 11px; margin-top: 5px; font-style: italic;">Note: ${item.special_instructions}</div>` : ''}
+                <div class="item-name">${item.menu_item_name}</div>
+                <div class="item-qty">Qty: ${item.quantity}</div>
+                ${item.special_instructions ? `<div class="item-qty" style="font-style: italic;">Note: ${item.special_instructions}</div>` : ''}
               </div>
             `).join('')}
           </div>
-
+          
+          ${order.notes ? `<div class="info"><strong>Order Notes:</strong><br/>${order.notes}</div>` : ''}
+          
           <div class="footer">
+            <div>--- Prepare with care ---</div>
             <div>Powered by LoopWar</div>
           </div>
 
@@ -400,7 +406,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
               <tbody>
                 ${items.map((item: any) => `
                   <tr>
-                    <td>${item.item_name}</td>
+                    <td>${item.menu_item_name}</td>
                     <td style="text-align: center;">${item.quantity}</td>
                     <td style="text-align: right;">${restaurant?.currency || '₹'} ${Number(item.unit_price).toFixed(2)}</td>
                     <td style="text-align: right;">${restaurant?.currency || '₹'} ${Number(item.total).toFixed(2)}</td>

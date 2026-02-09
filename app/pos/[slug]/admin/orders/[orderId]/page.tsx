@@ -247,93 +247,89 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
         <title>Bill - ${order.order_number}</title>
         <style>
           @media print {
-            body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+            body { margin: 0; padding: 20px; }
           }
-          body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; }
-          .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; }
-          .restaurant-name { font-size: 24px; font-weight: bold; }
-          .bill-title { font-size: 18px; margin-top: 10px; }
-          .info { margin: 5px 0; display: flex; justify-content: space-between; }
-          .items { border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 10px 0; margin: 15px 0; }
-          .item { display: flex; justify-content: space-between; margin: 8px 0; }
-          .item-details { flex: 1; }
-          .item-name { font-weight: bold; }
-          .item-price { text-align: right; min-width: 80px; }
-          .totals { border-top: 2px solid #000; padding-top: 10px; }
-          .total-line { display: flex; justify-content: space-between; margin: 5px 0; }
-          .grand-total { font-size: 18px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
-          .footer { text-align: center; margin-top: 20px; font-size: 12px; border-top: 1px dashed #000; padding-top: 10px; }
+          @page { size: A4; margin: 0; }
+          body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+          .restaurant-info { text-align: center; margin-bottom: 20px; font-size: 12px; }
+          .restaurant-info h1 { font-size: 24px; margin: 0 0 10px 0; }
+          .bill-title { text-align: center; font-size: 24px; margin: 20px 0; font-weight: bold; }
+          .order-info { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+          .order-info div { margin: 5px 0; font-size: 13px; }
+          .items { margin: 20px 0; }
+          .items table { width: 100%; border-collapse: collapse; }
+          .items th { text-align: left; padding: 10px 5px; border-bottom: 2px solid #000; font-size: 12px; }
+          .items td { padding: 8px 5px; border-bottom: 1px solid #ddd; font-size: 12px; }
+          .totals { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+          .totals div { display: flex; justify-content: space-between; margin: 8px 0; font-size: 13px; }
+          .totals .total { font-size: 16px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+          .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #666; border-top: 1px dashed #000; padding-top: 10px; }
         </style>
       </head>
       <body>
-        <div class="header">
-          <div class="restaurant-name">${restaurant.name}</div>
+        <div class="restaurant-info">
+          <h1>${restaurant.name}</h1>
           <div>${restaurant.address || ''}</div>
           <div>${restaurant.phone || ''}</div>
-          <div class="bill-title">TAX INVOICE</div>
         </div>
-        
-        <div class="info">
-          <span>Bill No:</span>
-          <span><strong>${order.order_number || order.id.slice(0, 8)}</strong></span>
+
+        <div class="bill-title">TAX INVOICE</div>
+
+        <div class="order-info">
+          <div><strong>Bill No:</strong> ${order.order_number || order.id.slice(0, 8)}</div>
+          <div><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</div>
+          <div><strong>Table:</strong> ${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</div>
+          ${order.customer_name ? `<div><strong>Customer:</strong> ${order.customer_name}</div>` : ''}
+          ${order.customer_phone ? `<div><strong>Phone:</strong> ${order.customer_phone}</div>` : ''}
         </div>
-        <div class="info">
-          <span>Date:</span>
-          <span>${new Date(order.created_at).toLocaleString()}</span>
-        </div>
-        <div class="info">
-          <span>Table:</span>
-          <span>${order.table_number ? `Table ${order.table_number}` : 'Takeaway'}</span>
-        </div>
-        ${order.customer_name ? `
-        <div class="info">
-          <span>Customer:</span>
-          <span>${order.customer_name}</span>
-        </div>
-        ` : ''}
-        ${order.customer_phone ? `
-        <div class="info">
-          <span>Phone:</span>
-          <span>${order.customer_phone}</span>
-        </div>
-        ` : ''}
         
         <div class="items">
-          ${order.items.map(item => `
-            <div class="item">
-              <div class="item-details">
-                <div class="item-name">${item.menu_item_name}</div>
-                <div style="font-size: 12px; color: #666;">${item.quantity} × ${restaurant?.currency || '₹'} ${item.unit_price.toFixed(2)}</div>
-              </div>
-              <div class="item-price">${restaurant?.currency || '₹'} ${item.total.toFixed(2)}</div>
-            </div>
-          `).join('')}
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th style="text-align: center;">Qty</th>
+                <th style="text-align: right;">Price</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.items.map(item => `
+                <tr>
+                  <td>${item.menu_item_name}</td>
+                  <td style="text-align: center;">${item.quantity}</td>
+                  <td style="text-align: right;">${restaurant?.currency || '₹'} ${item.unit_price.toFixed(2)}</td>
+                  <td style="text-align: right;">${restaurant?.currency || '₹'} ${item.total.toFixed(2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
         
         <div class="totals">
-          <div class="total-line">
+          <div>
             <span>Subtotal:</span>
             <span>${restaurant?.currency || '₹'} ${order.subtotal.toFixed(2)}</span>
           </div>
-          <div class="total-line">
-            <span>Tax:</span>
-            <span>${restaurant?.currency || '₹'} ${order.tax.toFixed(2)}</span>
+          <div>
+            <span>Tax (${order.tax.toFixed(2)}%):</span>
+            <span>${restaurant?.currency || '₹'} ${(order.total - order.subtotal).toFixed(2)}</span>
           </div>
           ${order.discount > 0 ? `
-          <div class="total-line">
+          <div>
             <span>Discount:</span>
             <span>- ${restaurant?.currency || '₹'} ${order.discount.toFixed(2)}</span>
           </div>
           ` : ''}
-          <div class="total-line grand-total">
+          <div class="total">
             <span>GRAND TOTAL:</span>
             <span>${restaurant?.currency || '₹'} ${order.total.toFixed(2)}</span>
           </div>
         </div>
         
-        <div style="margin-top: 15px; text-align: center;">
-          <div>Payment Method: <strong>${order.payment_method.toUpperCase()}</strong></div>
-          <div>Payment Status: <strong>${order.payment_status.toUpperCase()}</strong></div>
+        <div style="margin: 15px 0; text-align: center;">
+          <div><strong>Payment Method:</strong> ${order.payment_method.toUpperCase()}</div>
+          <div><strong>Payment Status:</strong> ${order.payment_status.toUpperCase()}</div>
         </div>
         
         <div class="footer">
