@@ -27,7 +27,6 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ slug: s
   const [table, setTable] = useState<any>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
@@ -57,8 +56,6 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ slug: s
         const tableData = await tableResponse.json();
         setTable(tableData);
       }
-      
-      setLoading(false);
     };
     init();
   }, [params]);
@@ -143,14 +140,6 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ slug: s
     acc[item.category_name].push(item);
     return acc;
   }, {} as Record<string, MenuItem[]>);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-32">

@@ -24,7 +24,6 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
   const router = useRouter();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [tables, setTables] = useState<Table[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -51,7 +50,6 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
       setRestaurant(restaurantData);
       
       await loadTables(restaurantData.id);
-      setLoading(false);
     };
     
     init();

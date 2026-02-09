@@ -61,7 +61,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const [customerEmail, setCustomerEmail] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'upi' | 'wallet'>('cash');
   const [notes, setNotes] = useState('');
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showTableModal, setShowTableModal] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -94,8 +93,6 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
         loadCategories(restaurantData.id),
         loadTables(restaurantData.id)
       ]);
-      
-      setLoading(false);
     };
     
     init();

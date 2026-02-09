@@ -58,7 +58,6 @@ export default function MenuManagementPage({ params }: { params: Promise<{ slug:
           loadCategories(data.id)
         ]);
       }
-      setLoading(false);
     };
     init();
   }, [params, router]);
@@ -127,10 +126,6 @@ export default function MenuManagementPage({ params }: { params: Promise<{ slug:
     const matchesCategory = selectedCategory === 'all' || item.category_name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div></div>;
-  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
