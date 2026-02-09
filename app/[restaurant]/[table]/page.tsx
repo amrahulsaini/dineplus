@@ -10,8 +10,8 @@ interface MenuItem {
   base_price: number;
   image: string;
   category_name: string;
-  is_vegetarian: boolean;
-  is_available: boolean;
+  is_veg: boolean;
+  is_active: boolean;
 }
 
 interface CartItem {
@@ -56,11 +56,14 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ restaur
         const menuResponse = await fetch(`/api/menu?restaurantId=${restData.id}`);
         if (menuResponse.ok) {
           const menuData = await menuResponse.json();
-          const items = Array.isArray(menuData) ? menuData.filter((item: MenuItem) => item.is_available) : [];
+          console.log('Menu data loaded:', menuData); // Debug log
+          const items = Array.isArray(menuData) ? menuData.filter((item: MenuItem) => item.is_active) : [];
+          console.log('Filtered items:', items); // Debug log
           setMenuItems(items);
           
           // Extract unique categories
           const cats = [...new Set(items.map((item: MenuItem) => item.category_name))];
+          console.log('Categories:', cats); // Debug log
           setCategories(cats);
         }
         
@@ -312,7 +315,7 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ restaur
                           alt={item.name} 
                           className="w-full h-full object-cover"
                         />
-                        {item.is_vegetarian && (
+                        {item.is_veg && (
                           <div className="absolute top-2 right-2 bg-green-500 text-white p-2 rounded-full shadow-lg">
                             <Leaf className="w-4 h-4" />
                           </div>
@@ -323,7 +326,7 @@ export default function CustomerMenuPage({ params }: { params: Promise<{ restaur
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h3 className="font-bold text-lg text-gray-900 mb-1">{item.name}</h3>
-                          {item.is_vegetarian && !item.image && (
+                          {item.is_veg && !item.image && (
                             <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-semibold">
                               <Leaf className="w-3 h-3" /> Veg
                             </span>
