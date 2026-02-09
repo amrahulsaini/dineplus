@@ -107,10 +107,12 @@ CREATE TABLE orders (
     restaurant_id VARCHAR(36) NOT NULL,
     restaurant_slug VARCHAR(255) NOT NULL,
     table_id VARCHAR(36),
+    customer_id VARCHAR(36),
     customer_name VARCHAR(255),
     customer_phone VARCHAR(50),
+    customer_email VARCHAR(255),
     order_type ENUM('dine-in', 'takeaway', 'delivery') NOT NULL,
-    status ENUM('pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled') DEFAULT 'pending',
+    status ENUM('pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled', 'completed') DEFAULT 'confirmed',
     subtotal DECIMAL(10,2) NOT NULL,
     tax DECIMAL(10,2) DEFAULT 0,
     discount DECIMAL(10,2) DEFAULT 0,
@@ -173,6 +175,25 @@ CREATE TABLE inventory (
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
     INDEX idx_restaurant (restaurant_id),
     INDEX idx_low_stock (restaurant_id, quantity, min_quantity)
+);
+
+-- 11. CUSTOMERS (Multi-tenant) - Store customer information
+CREATE TABLE customers (
+    id VARCHAR(36) PRIMARY KEY,
+    restaurant_id VARCHAR(36) NOT NULL,
+    name VARCHAR(255),
+    phone VARCHAR(50),
+    email VARCHAR(255),
+    address TEXT,
+    notes TEXT,
+    total_orders INT DEFAULT 0,
+    total_spent DECIMAL(10,2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
+    INDEX idx_restaurant (restaurant_id),
+    INDEX idx_phone (phone),
+    INDEX idx_email (email)
 );
 
 -- =====================================================

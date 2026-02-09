@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { restaurantId, restaurantSlug, tableId, customerName, customerPhone, orderType, items, subtotal, tax, discount, total, paymentMethod, notes } = body;
+    const { restaurantId, restaurantSlug, tableId, customerName, customerPhone, customerEmail, orderType, items, subtotal, tax, discount, total, paymentMethod, notes } = body;
     
     if (!restaurantId || !restaurantSlug || !items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'Invalid order data' }, { status: 400 });
@@ -75,12 +75,12 @@ export async function POST(request: NextRequest) {
     const orderId = uuidv4();
     
     // Insert order
-    const orderQuery = `INSERT INTO orders (id, restaurant_id, restaurant_slug, table_id, customer_name, customer_phone, 
+    const orderQuery = `INSERT INTO orders (id, restaurant_id, restaurant_slug, table_id, customer_name, customer_phone, customer_email,
                         order_type, status, subtotal, tax, discount, total, payment_method, payment_status, notes) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmed', ?, ?, ?, ?, ?, 'pending', ?)`;
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'confirmed', ?, ?, ?, ?, ?, 'pending', ?)`;
     
     await pool.query(orderQuery, [
-      orderId, restaurantId, restaurantSlug, tableId || null, customerName || null, customerPhone || null,
+      orderId, restaurantId, restaurantSlug, tableId || null, customerName || null, customerPhone || null, customerEmail || null,
       orderType, subtotal, tax || 0, discount || 0, total, paymentMethod || 'cash', notes || null
     ]);
     

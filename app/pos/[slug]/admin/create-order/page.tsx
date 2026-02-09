@@ -58,6 +58,8 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
   const [selectedTable, setSelectedTable] = useState<string>('');
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'upi' | 'wallet'>('cash');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -321,13 +323,14 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
           tableId: orderType === 'dine-in' ? selectedTable : null,
           customerName: customerName || null,
           customerPhone: customerPhone || null,
+          customerEmail: customerEmail || null,
           orderType,
           items: cart,
           subtotal,
           tax,
           discount: 0,
           total,
-          paymentMethod: 'cash',
+          paymentMethod,
           notes
         })
       });
@@ -467,8 +470,10 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
               )}
             </div>
 
-            {orderType !== 'dine-in' && (
-              <div className="mb-4 space-y-3">
+            {/* Customer Details - Always show */}
+            <div className="mb-4">
+              <h4 className="font-bold text-sm text-gray-700 mb-3">Customer Details (Optional)</h4>
+              <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Customer Name"
@@ -483,8 +488,46 @@ export default function CreateOrderPage({ params }: { params: Promise<{ slug: st
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
                 />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none text-sm"
+                />
               </div>
-            )}
+            </div>
+
+            {/* Payment Method */}
+            <div className="mb-4">
+              <h4 className="font-bold text-sm text-gray-700 mb-3">Payment Method</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setPaymentMethod('cash')}
+                  className={paymentMethod === 'cash' ? 'py-2 px-3 rounded-lg font-semibold text-sm bg-orange-500 text-white' : 'py-2 px-3 rounded-lg font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  💵 Cash
+                </button>
+                <button
+                  onClick={() => setPaymentMethod('card')}
+                  className={paymentMethod === 'card' ? 'py-2 px-3 rounded-lg font-semibold text-sm bg-orange-500 text-white' : 'py-2 px-3 rounded-lg font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  💳 Card
+                </button>
+                <button
+                  onClick={() => setPaymentMethod('upi')}
+                  className={paymentMethod === 'upi' ? 'py-2 px-3 rounded-lg font-semibold text-sm bg-orange-500 text-white' : 'py-2 px-3 rounded-lg font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  📱 UPI
+                </button>
+                <button
+                  onClick={() => setPaymentMethod('wallet')}
+                  className={paymentMethod === 'wallet' ? 'py-2 px-3 rounded-lg font-semibold text-sm bg-orange-500 text-white' : 'py-2 px-3 rounded-lg font-semibold text-sm bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                >
+                  👛 Wallet
+                </button>
+              </div>
+            </div>
 
             <div className="border-t-2 border-gray-200 pt-4 space-y-2">
               <div className="flex justify-between text-sm">
