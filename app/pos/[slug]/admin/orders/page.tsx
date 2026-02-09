@@ -67,7 +67,12 @@ export default function OrdersPage({ params }: { params: Promise<{ slug: string 
     const response = await fetch(`/api/orders?restaurantId=${restaurantId}&limit=100`);
     if (response.ok) {
       const data = await response.json();
-      setOrders(Array.isArray(data) ? data : []);
+      // Convert numeric fields to numbers
+      const orders = Array.isArray(data) ? data.map((order: any) => ({
+        ...order,
+        total: Number(order.total) || 0
+      })) : [];
+      setOrders(orders);
     }
   };
 

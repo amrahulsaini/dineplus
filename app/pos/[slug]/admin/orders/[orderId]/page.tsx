@@ -72,6 +72,19 @@ export default function OrderDetailPage({ params }: { params: Promise<{ slug: st
     const response = await fetch(`/api/orders/${orderId}`);
     if (response.ok) {
       const data = await response.json();
+      // Convert numeric fields to numbers
+      if (data.items && Array.isArray(data.items)) {
+        data.items = data.items.map((item: any) => ({
+          ...item,
+          unit_price: Number(item.unit_price) || 0,
+          total: Number(item.total) || 0,
+          quantity: Number(item.quantity) || 0
+        }));
+      }
+      data.subtotal = Number(data.subtotal) || 0;
+      data.tax = Number(data.tax) || 0;
+      data.discount = Number(data.discount) || 0;
+      data.total = Number(data.total) || 0;
       setOrder(data);
     }
   };
