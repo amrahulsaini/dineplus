@@ -73,14 +73,6 @@ export default function AdminLayout({
     { icon: Settings, label: 'Settings', href: `/pos/${slug}/admin/settings` },
   ];
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
