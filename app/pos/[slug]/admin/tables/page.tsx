@@ -80,7 +80,7 @@ export default function TablesAdminPage({ params }: { params: Promise<{ slug: st
 
   const showQRCode = async (table: Table) => {
     setSelectedTable(table);
-    const url = `${window.location.origin}/pos/${restaurant?.slug}/table/${table.id}`;
+    const url = `${window.location.origin}/${restaurant?.slug}/${table.table_number}`;
     setQrCodeUrl(url);
     
     // Generate QR code on canvas
