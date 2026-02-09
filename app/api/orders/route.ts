@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     // Insert order
     const orderQuery = `INSERT INTO orders (id, restaurant_id, restaurant_slug, table_id, customer_name, customer_phone, 
                         order_type, status, subtotal, tax, discount, total, payment_method, payment_status, notes) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, 'pending', ?)`;
+                        VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmed', ?, ?, ?, ?, ?, 'pending', ?)`;
     
     await pool.query(orderQuery, [
       orderId, restaurantId, restaurantSlug, tableId || null, customerName || null, customerPhone || null,
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    return NextResponse.json({ id: orderId, status: 'pending' }, { status: 201 });
+    return NextResponse.json({ id: orderId, status: 'confirmed' }, { status: 201 });
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
